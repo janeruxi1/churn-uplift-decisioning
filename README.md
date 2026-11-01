@@ -93,9 +93,10 @@ download KKBox from Kaggle and the telecom file from OpenML, run
 
 ## Interactive demo
 
-`streamlit run app/streamlit_app.py`: the churn model's results, the retention experiment, and
-the offer decision with its assumptions as sliders. The StreamFlix appendix has its own app,
-`app/streamflix_app.py`.
+[janeruxi1-streamflix-churn-retention.streamlit.app](https://janeruxi1-streamflix-churn-retention.streamlit.app/)
+(`streamlit run app/streamlit_app.py` locally). Two pages: **real data** (the churn model's
+results, the retention experiment, and the offer decision with its assumptions as sliders) and the
+**StreamFlix case study** from the project's first version.
 
 ## Limits
 
