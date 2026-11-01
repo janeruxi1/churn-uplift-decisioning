@@ -37,7 +37,7 @@ from src.data import kkbox
 con, SOURCE = kkbox.connect()
 BOOT = int(os.environ.get("KKBOX_BOOT", "1000"))
 SEED = 20261101
-has_logs = "logs" in [r[0] for r in con.sql("SHOW TABLES").fetchall()]
+has_logs = "logs" in [r[0] for r in con.execute("SHOW TABLES").fetchall()]
 print(f"source: {SOURCE}; listening logs available: {has_logs}")
 
 # %% [markdown]
@@ -47,7 +47,7 @@ print(f"source: {SOURCE}; listening logs available: {has_logs}")
 LISTEN = ["days_active", "total_hours", "unique_songs", "songs_played", "share_completed", "share_skipped",
           "hours_last_7", "hours_prior_7"]
 if has_logs:
-    listen = con.sql("""
+    listen = con.execute("""
         WITH e AS (SELECT l.msno, max(x.membership_expire_date) AS expiry
                    FROM train_v2 l JOIN tx x USING (msno)
                    WHERE x.membership_expire_date BETWEEN 20170301 AND 20170331 AND x.transaction_date < 20170301

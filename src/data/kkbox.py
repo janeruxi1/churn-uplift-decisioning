@@ -75,7 +75,7 @@ def rebuild_label(con, cohort: str = "feb") -> pd.DataFrame:
     a non-cancelled transaction extending past E is dated within 30 days after E."""
     lo = CUTOFF[cohort]
     hi = lo + 27 if cohort == "feb" else lo + 30
-    return con.sql(f"""
+    return con.execute(f"""
         WITH e AS (SELECT l.msno, max(x.membership_expire_date) AS expiry
                    FROM {LABELS[cohort]} l JOIN tx x USING (msno)
                    WHERE x.membership_expire_date BETWEEN {lo} AND {hi} GROUP BY 1)
@@ -89,7 +89,7 @@ def rebuild_label(con, cohort: str = "feb") -> pd.DataFrame:
 def features(con, cohort: str, tx_table: str = "tx") -> pd.DataFrame:
     """One row per cohort member, built only from rows dated before the cohort's cutoff."""
     cut = CUTOFF[cohort]
-    return con.sql(f"""
+    return con.execute(f"""
         WITH c AS (SELECT msno FROM {LABELS[cohort]}),
         h AS (SELECT x.* FROM {tx_table} x JOIN c USING (msno) WHERE x.transaction_date < {cut}),
         last AS (SELECT * FROM (SELECT *, row_number() OVER (PARTITION BY msno
@@ -127,7 +127,7 @@ def features(con, cohort: str, tx_table: str = "tx") -> pd.DataFrame:
 
 
 def labels(con, cohort: str) -> pd.DataFrame:
-    return con.sql(f"SELECT msno, is_churn FROM {LABELS[cohort]} ORDER BY msno").df()
+    return con.execute(f"SELECT msno, is_churn FROM {LABELS[cohort]} ORDER BY msno").df()
 
 
 # ---------------------------------------------------------------- synthetic stand-in

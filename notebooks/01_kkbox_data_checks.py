@@ -39,8 +39,8 @@ from src import records
 from src.data import kkbox
 
 con, SOURCE = kkbox.connect()
-sizes = {name: con.sql(f"SELECT count(*) FROM {name}").fetchone()[0] for name in ("tx", "members", "train", "train_v2")}
-span = con.sql("SELECT min(transaction_date), max(transaction_date) FROM tx").fetchone()
+sizes = {name: con.execute(f"SELECT count(*) FROM {name}").fetchone()[0] for name in ("tx", "members", "train", "train_v2")}
+span = con.execute("SELECT min(transaction_date), max(transaction_date) FROM tx").fetchone()
 print(f"source: {SOURCE}; rows {sizes}; payments dated {span[0]} to {span[1]}")
 
 # %% [markdown]
@@ -68,7 +68,7 @@ cross
 
 # %%
 mismatch = rebuilt[(rebuilt["is_churn"] == 1) & (rebuilt["churn_rebuilt"] == 0)]
-expl = con.sql("""
+expl = con.execute("""
     SELECT avg(CASE WHEN n_cancel > 0 THEN 1.0 ELSE 0 END) AS share_with_cancel_after_expiry
     FROM (SELECT m.msno, sum(x.is_cancel) AS n_cancel
           FROM mismatch m JOIN tx x USING (msno)
@@ -107,11 +107,11 @@ print(f"features: February {feb.shape}, March {mar.shape} -> cached for notebook
 
 # %%
 quality = {
-    "duplicate_members_feb": int(sizes["train"] - con.sql("SELECT count(DISTINCT msno) FROM train").fetchone()[0]),
-    "duplicate_members_mar": int(sizes["train_v2"] - con.sql("SELECT count(DISTINCT msno) FROM train_v2").fetchone()[0]),
-    "age_outside_10_80_share": float(con.sql("SELECT avg(CASE WHEN bd BETWEEN 10 AND 80 THEN 0.0 ELSE 1 END) FROM members").fetchone()[0]),
-    "zero_or_negative_paid": int(con.sql("SELECT count(*) FROM tx WHERE actual_amount_paid <= 0").fetchone()[0]),
-    "expiry_before_payment": int(con.sql("SELECT count(*) FROM tx WHERE membership_expire_date < transaction_date").fetchone()[0]),
+    "duplicate_members_feb": int(sizes["train"] - con.execute("SELECT count(DISTINCT msno) FROM train").fetchone()[0]),
+    "duplicate_members_mar": int(sizes["train_v2"] - con.execute("SELECT count(DISTINCT msno) FROM train_v2").fetchone()[0]),
+    "age_outside_10_80_share": float(con.execute("SELECT avg(CASE WHEN bd BETWEEN 10 AND 80 THEN 0.0 ELSE 1 END) FROM members").fetchone()[0]),
+    "zero_or_negative_paid": int(con.execute("SELECT count(*) FROM tx WHERE actual_amount_paid <= 0").fetchone()[0]),
+    "expiry_before_payment": int(con.execute("SELECT count(*) FROM tx WHERE membership_expire_date < transaction_date").fetchone()[0]),
     "feb_members_without_member_row": float(1 - feb["has_member_row"].mean()),
     "feb_members_without_prior_payment": float(feb["plan_days"].isna().mean()),
 }

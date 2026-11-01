@@ -12,7 +12,7 @@ def spells(con, before: int) -> pd.DataFrame:
     """Continuous subscription spells from non-cancelled payments dated before `before` (a gap of
     more than 30 days after the paid-through date starts a new spell). One row per spell: start,
     paid-through date, months, whether it is still running at `before` (censored), plan group."""
-    return con.sql(f"""
+    return con.execute(f"""
         WITH p AS (SELECT msno, strptime(CAST(transaction_date AS VARCHAR), '%Y%m%d') AS td,
                           strptime(CAST(membership_expire_date AS VARCHAR), '%Y%m%d') AS ed,
                           payment_plan_days, is_auto_renew, actual_amount_paid
