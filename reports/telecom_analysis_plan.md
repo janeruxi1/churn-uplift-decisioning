@@ -52,3 +52,38 @@ the offer helps most (uplift targeting) rather than those most likely to churn?
 
 Nothing in the outcomes. If the downloaded file's columns or sizes differ from the description,
 that is recorded here before any outcome is read.
+
+## 2026-11-01 · The randomization check failed; how the analysis continues
+
+**What happened.** The downloaded file matches the description (11,896 rows; 160 components,
+18 categories, `t`, `y`; 9,010 called, 2,886 held back = 75.74%). The randomization check
+failed: a ridge classifier predicts who was called with a cross-validated **AUC of 0.64**, far
+outside what shuffled labels produce. The call rate differs by category (for `FACTOR18`, from 64%
+to 83% across its larger levels), and the numeric components still predict the call within each
+level of `FACTOR18` (AUC 0.59 to 0.64). So calls were not assigned with the same probability to
+everyone: the "random" hold-back depended on the customer's profile, perhaps through campaign
+waves or segments with different hold-back rates. (The authors' own check compared a
+classifier's loss with always guessing "called", which is much less sensitive.)
+
+**Disclosure.** The check and the readout ran in the same first test run of the notebook, so
+the unadjusted difference was printed before this note was written: called 3.36%, held back
+3.64%, a change of −0.28 points (95% CI −1.10 to +0.46). It is reported, but it is no longer the
+primary estimate, because it can be biased by who was held back.
+
+**How the analysis continues** (fixed now, before any adjusted or targeting result is computed):
+
+1. **Treat the campaign as randomized given the features.** Assignment is modelled with a
+   propensity score: L2 logistic regression on all features, 5-fold cross-fitted. Overlap is
+   checked; customers with a propensity below 0.05 or above 0.95 are dropped and counted.
+2. **Primary effect: doubly robust (AIPW).** Cross-fitted propensity plus cross-fitted churn
+   models for each arm (the LightGBM settings already in the plan's targeting section), with an
+   influence-function 95% interval. Secondary: inverse-probability weighting (Hajek). The
+   unadjusted difference is shown beside them.
+3. **Balance after weighting:** every feature's standardized mean difference below 0.1, and the
+   weighted treatment classifier's AUC reported.
+4. **Targeting:** the Qini and top-share comparisons are computed with inverse-propensity
+   weights, so each ranking is judged on a reweighted comparison of called and held-back
+   customers. The decision rule is unchanged.
+5. **The limit, stated in the memo:** this assumes the features capture everything that decided
+   who was held back. That cannot be checked from the data.
+
