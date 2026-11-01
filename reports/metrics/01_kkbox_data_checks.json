@@ -1,0 +1,36 @@
+{
+  "source": "real",
+  "rows": {
+    "tx": 22975416,
+    "members": 6769473,
+    "train": 992931,
+    "train_v2": 970960
+  },
+  "payments_span": [
+    20150101,
+    20170331
+  ],
+  "label_agreement_feb": 0.97621889,
+  "label_crosstab_feb": {
+    "0_0": 929446,
+    "0_1": 14,
+    "1_0": 23599,
+    "1_1": 39872
+  },
+  "feb_churn_rate": 0.06392287,
+  "mismatch_with_cancel_share": 0.3109563,
+  "no_future_data": true,
+  "quality": {
+    "duplicate_members_feb": 0,
+    "duplicate_members_mar": 0,
+    "age_outside_10_80_share": 0.67221747,
+    "zero_or_negative_paid": 1218210,
+    "expiry_before_payment": 158503,
+    "feb_members_without_member_row": 0.1165942,
+    "feb_members_without_prior_payment": 0.00210991
+  },
+  "churn_by_auto_renew_feb": {
+    "0": 0.32542382,
+    "1": 0.02989218
+  }
+}

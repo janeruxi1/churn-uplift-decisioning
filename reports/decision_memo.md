@@ -1,159 +1,107 @@
-# Retention Targeting v1 — Decision Memo
+# Decision memo: who will churn, and is a retention offer worth it?
 
-**From:** Xi Ru, Data Science
-**To:** Marcus Lee (PM, Subscriber Retention), Retention Ops, Finance
-**Re:** Replacing the blanket m11 credit campaign with cost-aware targeting
-
-*All figures are per month for the full ~2.1M-subscriber base, estimated on a 50,000-subscriber sample and scaled up (×42). The data is synthetic; see Limitations.*
+**Author:** Xi Ru · **Data:** KKBox subscriptions (Kaggle, 2015–2017); a randomized retention
+campaign at a Belgian telecom operator (OpenML 45580, 2020) · Every number below is read from
+`reports/metrics/` and checked by `tests/test_reported_numbers.py`.
 
 ---
 
-## TL;DR
+## Recommendation
 
-**Recommendation: ship v1 (churn-model targeting with a cost-aware decision rule) at the $200k budget, and stop the blanket m11 campaign. Do not ship the v2 uplift model.**
+**Do not roll out a retention offer on borrowed evidence. Use the churn model to find the members
+at risk, and run a small KKBox test of a free-month offer on the highest-risk members first.**
 
-| | Blanket m11 (today) | Targeted v1 (proposed) |
-|---|---:|---:|
-| Subscribers contacted | 66,654 | 118,986 |
-| Spend | $333k | $200k |
-| Expected retained revenue | $82k | $374k |
-| **Net expected value** | **−$252k** | **+$174k** |
-| ROI (revenue / spend) | 0.25× | 1.87× |
+- The churn model is good and ready: on a later month it was never tuned on, its top 10% of
+  scores hold **60%** of the members who churned.
+- The only real evidence on what a retention contact does (a randomized telecom campaign) shows
+  **no detectable effect** on churn, and no way of choosing whom to call that beats calling at
+  random.
+- At that campaign's best estimate, an offer would pay for about 11,000 of 971,000 members a
+  month, but its interval includes no effect at all. A test needs only a few hundred members per
+  arm among the 33,000 highest-risk members to settle it.
 
-- **Swing: +$426k a month** while spending $133k less. The blanket loses money because almost no m11 subscribers were going to churn: v1 would contact only 4% of them.
-- **ROI target.** 1.87× is below the 2.0× kickoff target. ROI reaches 2.0× at a budget of about $150k (net EV $155k instead of $174k). Finance should choose between the two; I recommend the full $200k because each extra dollar still returns $1.31 (shadow price 0.31).
-- **The $5-credit experiment** confirms the credit works on average (12.6% of would-be churners retained, 95% CI 5–20%, vs the 15% we assumed). It is far too small to learn *who* responds: the uplift model ranks users no better than chance, so v2 is shelved.
+## Part 1 · KKBox: who will churn, and what are they worth?
 
----
+The analysis plan ([`kkbox_analysis_plan.md`](./kkbox_analysis_plan.md)) was committed before
+the data was downloaded.
 
-## Problem
+**The data can be trusted.** KKBox's churn label (no new paid subscription within 30 days of
+expiry) was rebuilt from the raw payments for the February 2017 cohort and agrees **97.6%** of the
+time. Every feature uses only payments dated before its cohort's cutoff, checked by rebuilding
+the features with all later rows deleted; that check found, and the code now fixes, 23 members
+whose "latest payment" was a tie picked at random.
 
-The Retention team sends a $5 credit to everyone reaching month 11, about 67k subscribers a month. Nobody measures who would have stayed anyway. Monthly churn is 5.3%, with spikes at month 2 (end of trial) and month 12 (anniversary).
+**The model.** Trained and tuned on February 2017 (6.4% churn), then scored once on March 2017:
 
-The PM's ask: for each subscriber, predict 30-day churn, recommend the cheapest worthwhile intervention, and stay within $200k a month.
+| Model | PR-AUC (March, 9.0% churn) | ROC-AUC | Churners in the top 10% |
+|---|---|---|---|
+| **LightGBM (ships)** | **0.594** | 0.863 | **60%** |
+| Logistic regression | 0.506 | 0.845 | 56% |
+| Rule: auto-renew off or last payment cancelled | 0.321 | 0.784 | 50% |
 
----
+LightGBM beats logistic regression by **+0.088** PR-AUC (95% CI +0.086 to +0.091), so it ships
+under the plan's rule. Auto-renew status and a recent cancellation carry most of the signal:
+February members with auto-renew off churned at **33%**, against **3.0%** with it on.
 
-## Part 1 — Churn model
+**One thing to watch.** Churn rose from 6.4% in February to 9.0% in March, and the model,
+calibrated on February, predicts **6.5%** on average for March. It ranks members well but its
+probabilities run low when churn rises, so a deployed model needs its calibration checked every
+month.
 
-A calibrated `HistGradientBoostingClassifier` (Optuna-tuned, Platt calibration), trained on 30k subscribers and evaluated once on a 10k held-out test set.
+**Listening adds little.** Within March, members who did not listen at all in the 14 days before
+expiry churned at 9.3%, against 8.9% for those who listened almost daily; adding listening
+features moves PR-AUC by only **+0.011**. Payment behaviour is the signal.
 
-| Metric (test set) | Value | Read |
-|---|---:|---|
-| PR-AUC | **0.177** (bootstrap 95% interval about ±0.03) | 3.3× the 0.053 random baseline |
-| ROC-AUC | 0.750 | |
-| Top-10% lift | **3.5×** | The riskiest 10% contain 35% of churners |
-| Brier | 0.047 | vs 0.051 for always predicting the base rate |
+**What a member is worth.** From 2.95 million real subscription spells, a March member is worth
+**NT$687** of margin on average over 24 months (17.6 expected paid months at a median NT$151 a
+month, 30% assumed margin).
 
-- **Model choice.** Logistic regression (PR-AUC 0.178) and tuned XGBoost (0.178) are statistically tied with the shipped model; every gap is inside the bootstrap interval. HistGBM is kept for practical reasons (sklearn-only, missing values, fast per-user SHAP), and logistic regression is the documented fallback. The tuned variant was chosen before looking at the test set.
-- **Calibration by segment** (predicted vs observed churn, test set): within ±13% for every plan tier, engagement cohort and tenure band except **month 12**: predicted 4.9%, observed 8.3% (p = 0.014, n = 291). The model under-predicts the anniversary spike, so v1 under-targets m12 subscribers. Fix before launch: add the anniversary flag to the calibration step, or calibrate by tenure band.
-- **Explanations.** SHAP gives each flagged subscriber their top risk drivers (recent viewing, annual billing, logins, days since last login, payment health). These are associations, so the driver-to-intervention map is a set of hypotheses for the per-lever tests, not a causal claim.
+## Part 2 · A real retention campaign: did calling customers keep them?
 
----
+11,896 high-risk telecom customers; 76% were called with a retention offer, 24% held back. Plan:
+[`telecom_analysis_plan.md`](./telecom_analysis_plan.md).
 
-## Part 2 — Decision rule (v1, what we ship)
+**The "randomized" campaign was not randomized the same way for everyone.** A model predicts who
+was called from the customer profile with an AUC of **0.64** (permutation p = 0.001), and the
+share called ranges from 64% to 83% across customer segments. The authors' own check, which
+compares a classifier with always guessing "called", misses this. A dated note in the plan
+switched the analysis, before any adjusted result was computed, to a propensity-adjusted design;
+after weighting, the largest imbalance on any feature falls from **0.35** to **0.09** standard
+deviations.
 
-```
-EV(subscriber, lever) = P(churn) × uplift(lever) × LTV(tier) − cost(lever)
-```
+**The effect: none detectable.**
 
-**Inputs.**
+| Estimate | Change in two-month churn (points, 95% CI) |
+|---|---|
+| **Doubly robust (primary)** | **−0.49** [−1.49, +0.51] |
+| Unadjusted (reference) | −0.28 [−1.10, +0.46] |
 
-| Lever | Cost | Uplift (share of would-be churners retained) |
-|---|---:|---:|
-| `curated_playlist` | $1 | 5% |
-| `credit_5` | $5 | 15% (experiment: 12.6%) |
-| `premium_upgrade` | $12 | 25% |
+The experiment could detect a change of about 1.1 points; it rules out the call cutting churn by
+more than 1.5 points.
 
-**LTV comes from our own retention curves.** The 30-day churn rate at each tenure month gives a monthly hazard; chaining them gives a survival curve per tier, and 24-month restricted mean survival × price gives LTV. 24 months covers the anniversary spike without relying on the thin long-tenure tail (only 9% of subscribers have 24+ months of tenure).
+**Targeting doesn't help either.** Neither ranking by churn risk nor two uplift models (T- and
+X-learner) beats calling at random within the eligible group.
 
-| Tier | Price | Still subscribed at 12 / 24 months | Expected months (of 24) | LTV |
-|---|---:|---:|---:|---:|
-| Basic | $9 | 44% / 26% | 12.1 | **$109** |
-| Standard | $14 | 50% / 32% | 13.4 | **$187** |
-| Premium | $19 | 59% / 44% | 15.6 | **$296** |
+## Part 3 · The decision
 
-**The budget binds.** 9.6% of subscribers have a positive-EV lever; covering all of them would cost $415k. With $200k, ranking subscribers by raw EV wastes money on expensive levers. The policy instead charges each dollar its opportunity cost λ (a Lagrange multiplier) and gives each subscriber the lever that maximises `EV − λ × cost`. At $200k, λ = 0.31. This rule earns **33% more** net EV than ranking by raw EV at the same spend ($174k vs $131k).
+Carrying the campaign's relative effect (**13.5%** fewer churners, 95% CI from 14% more to 41%
+fewer) to a free-month offer at KKBox is an assumption, so the decision is reported across the
+interval:
 
-**Lever mix at $200k.**
+- **At the point estimate**, the offer pays for **10,722** March members, worth about
+  **NT$0.57M** net for the month. At the bottom of the interval it pays for no one.
+- **Break-even:** even the most promising 1% of members need the offer to cut their churn by
+  **12%** to pay for itself, because the free month is also given to members who would have
+  stayed anyway.
+- **The test that settles it:** **33,333** members could plausibly be worth an offer (their
+  break-even lies inside the interval); they churn at **61.6%**. Detecting the 20% reduction they
+  need takes **256** members per arm.
 
-| Lever | Subscribers | % contacted | Spend | % spend |
-|---|---:|---:|---:|---:|
-| `curated_playlist` | 100,800 | 84.7% | $101k | 50.4% |
-| `credit_5` | 17,010 | 14.3% | $85k | 42.5% |
-| `premium_upgrade` | 1,176 | 1.0% | $14k | 7.1% |
+## Limits
 
-Premium upgrades stay far below the 10k/month ops cap.
-
-**Budget choice.**
-
-| Budget | Net EV | ROI |
-|---:|---:|---:|
-| $100k | $127k | 2.27× |
-| $150k | $155k | 2.04× |
-| **$200k** | **$174k** | **1.87×** |
-| $250k | $187k | 1.75× |
-| $415k (all positive-EV subscribers) | $203k | 1.49× |
-
-**Sensitivity.**
-- Uplifts at 0.5× of the assumptions: net EV $18k, ROI 1.32×. At 1.5×: $362k, 2.81×. Targeting beats the blanket throughout; the blanket loses $211k–$292k across the same range.
-- LTV horizon of 12 months: net EV $44k. At 36 months: $273k. The direction holds at every horizon.
-
----
-
-## Part 3 — The $5-credit experiment and the uplift model (v2: not shipped)
-
-A 50/50 randomized holdout tested the $5 credit (one treatment arm, one control, ~25k each).
-
-- **Average effect:** churn 5.28% (control) vs 4.61% (credit), a reduction of **0.67pp (95% CI 0.29–1.05pp)**, i.e. **12.6%** of would-be churners retained (CI 5–20%). That supports the 15% planning figure and should replace it in v1.
-- **Who responds:** four uplift learners (S, T, X, class transformation) all score Qini ≈ 0, and their predicted uplift has a rank correlation of +0.02 with each subscriber's true uplift. With a 0.7pp average effect, 25k per arm is enough to confirm the effect exists (minimum detectable effect 0.54pp) but nowhere near enough to learn differences between subscribers.
-- **Head-to-head** on 3,010 subscribers that neither model trained on, credit only, $200k budget, scored against the simulator's true effects:
-
-| Policy | Rank correlation with true value | True net value |
-|---|---:|---:|
-| v1 (churn risk × 15%) | 0.82 | **+$130k** |
-| v2 (uplift model) | 0.00 | −$132k |
-| Random | −0.01 | −$149k |
-| Oracle | 1.00 | +$233k |
-
-v1 captures over half of what perfect targeting would, because the credit's effect scales with churn risk and the churn model estimates risk well. **Keep v1; revisit uplift modelling only with a much larger or repeated experiment.**
-
----
-
-## Fairness and guardrails
-
-- **Targeting is concentrated by design.** Low-churn groups get few offers: heavy viewers (0.29× the average rate), Basic tier (0.41×), tenure 13–24 months (0.45×), tenure 25+ (0.16×; recall on actual churners 0.16× average). Except for the m12 under-prediction above, these follow lower churn or lower LTV, not miscalibration. Basic's lower targeting reflects its lower LTV ($109), which is a business choice for the PM to confirm.
-- **False-positive cost share guardrail (< 30%) is not met: ~72%** of spend goes to subscribers who would not have churned. At a 5% base rate no useful policy can meet this bar, and the EV rule already prices that waste in. I propose replacing it with "net EV > 0 per lever, checked in the holdout".
-- **Targeting reach** (≥ 5,000 a month): met (~119k).
-
----
-
-## Risks
-
-1. **Uplifts for playlist and Premium upgrade are untested.** Playlists are 85% of contacts and half the spend, so they matter most. Test them first.
-2. **m12 under-prediction** (above). Fix before launch.
-3. **Snapshot assumptions.** LTV treats today's monthly churn rates as stable over time, and scores are from a single snapshot (no out-of-time validation).
-4. **Retained-churner value.** LTV is a tier average from month 0; a retained at-risk subscriber may be worth less.
-
----
-
-## Rollout plan
-
-- **Weeks 1–2: shadow mode.** Score every subscriber daily and log the recommended lever, without sending anything.
-- **Week 3: randomized launch.** v1 for a random 50% of the base; blanket for the other 50%.
-- **Weeks 5–6: read-out.** Compare 30-day churn and cost. Ramp to 100% if v1 wins.
-- **Ongoing:**
-  - per-lever holdouts, playlist first;
-  - replace the 15% credit uplift with the measured 12.6%;
-  - recalibrate by tenure band;
-  - retrain quarterly.
-
----
-
-## Appendix
-
-- Decision rule, budget sweep, sensitivity: [`notebooks/06_decision_rule.ipynb`](../notebooks/06_decision_rule.ipynb)
-- Calibration and fairness: [`notebooks/05b_fairness_audit.ipynb`](../notebooks/05b_fairness_audit.ipynb)
-- Experiment and uplift models: [`notebooks/08_uplift_modeling.ipynb`](../notebooks/08_uplift_modeling.ipynb), [`notebooks/09_policy_comparison.ipynb`](../notebooks/09_policy_comparison.ipynb)
-- Metric framework: [`metrics_framework.md`](./metrics_framework.md) · PM brief: [`scenario_brief.md`](./scenario_brief.md) · Confidence intervals: [`metric_confidence_intervals.md`](./metric_confidence_intervals.md)
-- Interactive tool: `streamlit run app/streamlit_app.py`
+- KKBox data is from 2015–2017 and the margin (30%) is an assumption; lifetime value beyond 24
+  months of history is extrapolated.
+- The telecom effect assumes the customer features capture everything that decided who was held
+  back, which the data cannot confirm; and a telecom call is not a music-service offer.
+- The simulated first version of this project, where the true effects are known, is kept as the
+  [StreamFlix appendix](../notebooks/streamflix/README.md).

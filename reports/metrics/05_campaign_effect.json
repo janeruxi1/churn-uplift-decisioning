@@ -1,0 +1,75 @@
+{
+  "source": "real",
+  "n": 11896,
+  "called": 9010,
+  "held_back": 2886,
+  "share_called": 0.75739744,
+  "data_checks": {
+    "missing_values": 0,
+    "duplicate_rows": 0,
+    "constant_features": [
+      "FACTOR3"
+    ]
+  },
+  "randomization": {
+    "auc": 0.64027607,
+    "p_value": 0.000999,
+    "null_95th": 0.51461304,
+    "permutations": 1000,
+    "passed": false
+  },
+  "call_rate_by_factor18": {
+    "V7": 0.82887899,
+    "V4": 0.71377778,
+    "V2": 0.68869565,
+    "V6": 0.64258555,
+    "V1": 0.70857143
+  },
+  "propensity_dropped": 276,
+  "balance": {
+    "max_smd_before": 0.34737128,
+    "max_smd_after": 0.0944902,
+    "features_over_0_1_before": 19,
+    "features_over_0_1_after": 0,
+    "weighted_auc_treatment": 0.46746367
+  },
+  "effect_aipw": {
+    "diff": -0.00491411,
+    "ci": [
+      -0.01490274,
+      0.00507452
+    ],
+    "se": 0.00509633,
+    "p_value": 0.33492394
+  },
+  "effect_ipw": {
+    "diff": -0.00377941,
+    "ci": [
+      -0.01397554,
+      0.00563637
+    ],
+    "se": 0.00487776
+  },
+  "effect_unadjusted": {
+    "rate_called": 0.0336293,
+    "rate_held_back": 0.03638254,
+    "diff": -0.00275324,
+    "ci": [
+      -0.01101516,
+      0.00461732
+    ],
+    "relative": -0.07567465,
+    "p_value": 0.47938162,
+    "n_called": 9010,
+    "n_held_back": 2886
+  },
+  "effect_gcomp_20": {
+    "diff": -0.00416021,
+    "ci": [
+      -0.01217966,
+      0.00295143
+    ],
+    "se": 0.00375984
+  },
+  "mde_80": 0.01121999
+}

@@ -1,0 +1,896 @@
+{
+  "source": "real",
+  "reach_curve": [
+    {
+      "share_contacted": 0.0,
+      "churners_reached": 0.0
+    },
+    {
+      "share_contacted": 0.05,
+      "churners_reached": 0.41064926
+    },
+    {
+      "share_contacted": 0.1,
+      "churners_reached": 0.60369861
+    },
+    {
+      "share_contacted": 0.15,
+      "churners_reached": 0.68554907
+    },
+    {
+      "share_contacted": 0.2,
+      "churners_reached": 0.7349708
+    },
+    {
+      "share_contacted": 0.25,
+      "churners_reached": 0.76560174
+    },
+    {
+      "share_contacted": 0.3,
+      "churners_reached": 0.79283179
+    },
+    {
+      "share_contacted": 0.35,
+      "churners_reached": 0.81672965
+    },
+    {
+      "share_contacted": 0.4,
+      "churners_reached": 0.83837169
+    },
+    {
+      "share_contacted": 0.45,
+      "churners_reached": 0.8586969
+    },
+    {
+      "share_contacted": 0.5,
+      "churners_reached": 0.88069392
+    },
+    {
+      "share_contacted": 0.55,
+      "churners_reached": 0.90531318
+    },
+    {
+      "share_contacted": 0.6,
+      "churners_reached": 0.93106607
+    },
+    {
+      "share_contacted": 0.65,
+      "churners_reached": 0.94757815
+    },
+    {
+      "share_contacted": 0.7,
+      "churners_reached": 0.958674
+    },
+    {
+      "share_contacted": 0.75,
+      "churners_reached": 0.96876217
+    },
+    {
+      "share_contacted": 0.8,
+      "churners_reached": 0.97665178
+    },
+    {
+      "share_contacted": 0.85,
+      "churners_reached": 0.98381999
+    },
+    {
+      "share_contacted": 0.9,
+      "churners_reached": 0.99162945
+    },
+    {
+      "share_contacted": 0.95,
+      "churners_reached": 0.99730906
+    },
+    {
+      "share_contacted": 1.0,
+      "churners_reached": 1.0
+    }
+  ],
+  "value_grid": [
+    {
+      "margin": 0.2,
+      "relative_reduction": -0.2,
+      "members": 38,
+      "net_value_ntd": 131.04308784
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": -0.18,
+      "members": 31,
+      "net_value_ntd": 91.2018178
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": -0.16,
+      "members": 23,
+      "net_value_ntd": 59.85452218
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": -0.14,
+      "members": 14,
+      "net_value_ntd": 37.96760538
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": -0.12,
+      "members": 8,
+      "net_value_ntd": 25.50110775
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": -0.1,
+      "members": 7,
+      "net_value_ntd": 17.06047893
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": -0.08,
+      "members": 7,
+      "net_value_ntd": 8.97817755
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": -0.06,
+      "members": 5,
+      "net_value_ntd": 1.49164846
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": -0.04,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": -0.02,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": -0.0,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.02,
+      "members": 5489,
+      "net_value_ntd": 21097.28476611
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.04,
+      "members": 6833,
+      "net_value_ntd": 63116.06565716
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.06,
+      "members": 7328,
+      "net_value_ntd": 110142.97229737
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.08,
+      "members": 7640,
+      "net_value_ntd": 159429.86216184
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.1,
+      "members": 7898,
+      "net_value_ntd": 210204.11656916
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.12,
+      "members": 8187,
+      "net_value_ntd": 262314.53795096
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.14,
+      "members": 8458,
+      "net_value_ntd": 315693.43048063
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.16,
+      "members": 8768,
+      "net_value_ntd": 370563.32958593
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.18,
+      "members": 9132,
+      "net_value_ntd": 427154.26369555
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.2,
+      "members": 9617,
+      "net_value_ntd": 485798.45436905
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.22,
+      "members": 10306,
+      "net_value_ntd": 547130.15895486
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.24,
+      "members": 11211,
+      "net_value_ntd": 612157.15608016
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.26,
+      "members": 12184,
+      "net_value_ntd": 681341.61396903
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.28,
+      "members": 13350,
+      "net_value_ntd": 755013.3776735
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.3,
+      "members": 14596,
+      "net_value_ntd": 833543.16204893
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.32,
+      "members": 15852,
+      "net_value_ntd": 916924.72757217
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.34,
+      "members": 17255,
+      "net_value_ntd": 1005332.66233291
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.36,
+      "members": 18786,
+      "net_value_ntd": 1098966.90304514
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.38,
+      "members": 20288,
+      "net_value_ntd": 1198035.92653908
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.4,
+      "members": 21774,
+      "net_value_ntd": 1302323.57578396
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.42,
+      "members": 23240,
+      "net_value_ntd": 1411584.63308168
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.44,
+      "members": 24636,
+      "net_value_ntd": 1525626.89703825
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.46,
+      "members": 25815,
+      "net_value_ntd": 1643800.45103073
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.48,
+      "members": 26807,
+      "net_value_ntd": 1765443.07983702
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.5,
+      "members": 27676,
+      "net_value_ntd": 1890011.36085632
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.52,
+      "members": 28480,
+      "net_value_ntd": 2017149.3216322
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.54,
+      "members": 29195,
+      "net_value_ntd": 2146533.71002671
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.56,
+      "members": 29769,
+      "net_value_ntd": 2277796.25315074
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.58,
+      "members": 30342,
+      "net_value_ntd": 2410648.20065961
+    },
+    {
+      "margin": 0.2,
+      "relative_reduction": 0.6,
+      "members": 30860,
+      "net_value_ntd": 2544983.06733943
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": -0.2,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": -0.18,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": -0.16,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": -0.14,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": -0.12,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": -0.1,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": -0.08,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": -0.06,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": -0.04,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": -0.02,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": -0.0,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.02,
+      "members": 6611,
+      "net_value_ntd": 48949.78225769
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.04,
+      "members": 7505,
+      "net_value_ntd": 128233.2694649
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.06,
+      "members": 8000,
+      "net_value_ntd": 213464.94341508
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.08,
+      "members": 8430,
+      "net_value_ntd": 302606.25556169
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.1,
+      "members": 8995,
+      "net_value_ntd": 395878.2360644
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.12,
+      "members": 9753,
+      "net_value_ntd": 494594.28596728
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.14,
+      "members": 11110,
+      "net_value_ntd": 601607.2782289
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.16,
+      "members": 12857,
+      "net_value_ntd": 720218.53578985
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.18,
+      "members": 14912,
+      "net_value_ntd": 852098.68771949
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.2,
+      "members": 17191,
+      "net_value_ntd": 998006.47942068
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.22,
+      "members": 19677,
+      "net_value_ntd": 1158437.35586611
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.24,
+      "members": 22199,
+      "net_value_ntd": 1333899.90553264
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.26,
+      "members": 24583,
+      "net_value_ntd": 1523301.47516941
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.28,
+      "members": 26517,
+      "net_value_ntd": 1724679.66871246
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.3,
+      "members": 28027,
+      "net_value_ntd": 1935174.27652952
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.32,
+      "members": 29352,
+      "net_value_ntd": 2152870.86065422
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.34,
+      "members": 30413,
+      "net_value_ntd": 2376377.3820267
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.36,
+      "members": 31502,
+      "net_value_ntd": 2604790.85042189
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.38,
+      "members": 32335,
+      "net_value_ntd": 2837648.55099756
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.4,
+      "members": 33021,
+      "net_value_ntd": 3073687.38857591
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.42,
+      "members": 33628,
+      "net_value_ntd": 3312526.99026619
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.44,
+      "members": 34122,
+      "net_value_ntd": 3553610.51135013
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.46,
+      "members": 34577,
+      "net_value_ntd": 3796551.45339163
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.48,
+      "members": 34988,
+      "net_value_ntd": 4041158.42028557
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.5,
+      "members": 35433,
+      "net_value_ntd": 4287351.48840697
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.52,
+      "members": 35805,
+      "net_value_ntd": 4535063.741265
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.54,
+      "members": 36157,
+      "net_value_ntd": 4784024.57326046
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.56,
+      "members": 36489,
+      "net_value_ntd": 5034162.90945409
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.58,
+      "members": 36781,
+      "net_value_ntd": 5285339.2273579
+    },
+    {
+      "margin": 0.3,
+      "relative_reduction": 0.6,
+      "members": 37072,
+      "net_value_ntd": 5537433.81493396
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": -0.2,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": -0.18,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": -0.16,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": -0.14,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": -0.12,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": -0.1,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": -0.08,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": -0.06,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": -0.04,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": -0.02,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": -0.0,
+      "members": 0,
+      "net_value_ntd": 0.0
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.02,
+      "members": 7096,
+      "net_value_ntd": 80051.69757848
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.04,
+      "members": 7925,
+      "net_value_ntd": 197416.5288999
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.06,
+      "members": 8560,
+      "net_value_ntd": 323182.17240227
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.08,
+      "members": 9466,
+      "net_value_ntd": 457857.65000467
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.1,
+      "members": 11228,
+      "net_value_ntd": 606825.17353929
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.12,
+      "members": 13773,
+      "net_value_ntd": 778722.1696257
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.14,
+      "members": 16859,
+      "net_value_ntd": 977651.25419703
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.16,
+      "members": 20366,
+      "net_value_ntd": 1205027.26452476
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.18,
+      "members": 23805,
+      "net_value_ntd": 1461391.72165471
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.2,
+      "members": 26689,
+      "net_value_ntd": 1742900.24766738
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.22,
+      "members": 28789,
+      "net_value_ntd": 2042508.494797
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.24,
+      "members": 30475,
+      "net_value_ntd": 2355513.15991156
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.26,
+      "members": 31989,
+      "net_value_ntd": 2678944.0476052
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.28,
+      "members": 33034,
+      "net_value_ntd": 3010250.65378779
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.3,
+      "members": 33930,
+      "net_value_ntd": 3347466.60041452
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.32,
+      "members": 34688,
+      "net_value_ntd": 3689289.25792056
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.34,
+      "members": 35369,
+      "net_value_ntd": 4034884.53896915
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.36,
+      "members": 35986,
+      "net_value_ntd": 4383859.35044442
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.38,
+      "members": 36491,
+      "net_value_ntd": 4735697.57815882
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.4,
+      "members": 36964,
+      "net_value_ntd": 5089897.6054838
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.42,
+      "members": 37432,
+      "net_value_ntd": 5446249.44703795
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.44,
+      "members": 37807,
+      "net_value_ntd": 5804496.89725859
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.46,
+      "members": 38143,
+      "net_value_ntd": 6164333.00564811
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.48,
+      "members": 38510,
+      "net_value_ntd": 6525605.46139981
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.5,
+      "members": 38827,
+      "net_value_ntd": 6888310.68526431
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.52,
+      "members": 39145,
+      "net_value_ntd": 7252283.93243118
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.54,
+      "members": 39445,
+      "net_value_ntd": 7617467.75719594
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.56,
+      "members": 39710,
+      "net_value_ntd": 7983718.09026715
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.58,
+      "members": 40031,
+      "net_value_ntd": 8351056.7508176
+    },
+    {
+      "margin": 0.4,
+      "relative_reduction": 0.6,
+      "members": 40384,
+      "net_value_ntd": 8719555.39414228
+    }
+  ],
+  "relative_reduction": {
+    "point": 0.13506781,
+    "low": -0.13947679,
+    "high": 0.40961241
+  },
+  "policy": [
+    {
+      "effect": "point",
+      "relative_reduction": 0.13506781,
+      "members_worth_offering": 10722,
+      "share": 0.01104268,
+      "net_value_ntd": 574226.85009049,
+      "cost_ntd": 334078.84446409,
+      "churners_kept": 1286.68695897
+    },
+    {
+      "effect": "low",
+      "relative_reduction": -0.13947679,
+      "members_worth_offering": 0,
+      "share": 0.0,
+      "net_value_ntd": 0.0,
+      "cost_ntd": 0.0,
+      "churners_kept": 0.0
+    },
+    {
+      "effect": "high",
+      "relative_reduction": 0.40961241,
+      "members_worth_offering": 33333,
+      "share": 0.03432994,
+      "net_value_ntd": 3188167.53943773,
+      "cost_ntd": 2820240.55572048,
+      "churners_kept": 8417.32854311
+    }
+  ],
+  "breakeven": {
+    "top_1": 0.11914412,
+    "top_5": 1.4285138,
+    "top_10": 2.65017367
+  },
+  "sensitivity_point": {
+    "ltv_24_30": {
+      "members_worth_offering": 10722,
+      "net_value_ntd": 574226.85009049
+    },
+    "ltv_12_30": {
+      "members_worth_offering": 8109,
+      "net_value_ntd": 220876.10469866
+    },
+    "ltv_36_30": {
+      "members_worth_offering": 17086,
+      "net_value_ntd": 973786.93903716
+    },
+    "ltv_24_20": {
+      "members_worth_offering": 8379,
+      "net_value_ntd": 302403.56022866
+    },
+    "ltv_24_40": {
+      "members_worth_offering": 16107,
+      "net_value_ntd": 926019.50223606
+    }
+  },
+  "test_size": {
+    "members": 33333,
+    "target_churn": 0.61649104,
+    "relative_effect": 0.19547427,
+    "n_per_arm": 256
+  }
+}

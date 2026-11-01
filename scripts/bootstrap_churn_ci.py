@@ -2,7 +2,7 @@
 
 Reproduces the Phase 4 split (60/20/20 stratified, seed 42), trains the
 default HistGBM + Platt calibration, and bootstraps the TEST set.
-Writes reports/metric_confidence_intervals.md.
+Writes reports/streamflix/metric_confidence_intervals.md.
 
     python scripts/bootstrap_churn_ci.py
 """
@@ -80,7 +80,7 @@ def main():
         "",
         "Regenerate with `python scripts/bootstrap_churn_ci.py`.",
     ]
-    out = ROOT / "reports/metric_confidence_intervals.md"
+    out = ROOT / "reports/streamflix/metric_confidence_intervals.md"
     out.write_text("\n".join(lines) + "\n")
     print("\n".join(lines))
 

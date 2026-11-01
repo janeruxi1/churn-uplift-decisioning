@@ -1,0 +1,45 @@
+{
+  "source": "real",
+  "spells": 2953528,
+  "members": 2375164,
+  "share_censored": 0.39465175,
+  "observed_months": 60,
+  "groups": {
+    "longer, auto-renew off": {
+      "spells": 261282,
+      "survival_6": 0.95281598,
+      "survival_12": 0.82037797,
+      "survival_24": 0.61597899
+    },
+    "monthly, auto-renew off": {
+      "spells": 1019266,
+      "survival_6": 0.18271272,
+      "survival_12": 0.11874696,
+      "survival_24": 0.04211869
+    },
+    "monthly, auto-renew on": {
+      "spells": 1672980,
+      "survival_6": 0.68419214,
+      "survival_12": 0.60621742,
+      "survival_24": 0.43553339
+    }
+  },
+  "horizon": 24,
+  "margin": 0.3,
+  "mar_members": 970960,
+  "median_monthly_paid": 150.98666667,
+  "ltv_mean": 686.61728948,
+  "ltv_median": 625.13345983,
+  "ltv_mean_sensitivity": {
+    "ltv_24_30": 686.61728948,
+    "ltv_12_30": 386.91127945,
+    "ltv_36_30": 933.26084123,
+    "ltv_24_20": 457.74485966,
+    "ltv_24_40": 915.48971931
+  },
+  "group_shares": {
+    "monthly, auto-renew on": 0.87820817,
+    "monthly, auto-renew off": 0.09732533,
+    "longer, auto-renew off": 0.02446651
+  }
+}

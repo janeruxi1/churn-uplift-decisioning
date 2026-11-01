@@ -1,0 +1,104 @@
+{
+  "source": "real",
+  "feb_members": 992931,
+  "feb_churn": 0.06392287,
+  "mar_members": 970960,
+  "mar_churn": 0.08994191,
+  "cv": [
+    {
+      "model": "logistic",
+      "params": "{'C': 0.01}",
+      "cv_pr_auc": 0.43387695
+    },
+    {
+      "model": "logistic",
+      "params": "{'C': 0.1}",
+      "cv_pr_auc": 0.43484217
+    },
+    {
+      "model": "logistic",
+      "params": "{'C': 1.0}",
+      "cv_pr_auc": 0.43475635
+    },
+    {
+      "model": "lightgbm",
+      "params": "{'num_leaves': 31, 'min_child_samples': 200}",
+      "cv_pr_auc": 0.57478086
+    },
+    {
+      "model": "lightgbm",
+      "params": "{'num_leaves': 63, 'min_child_samples': 200}",
+      "cv_pr_auc": 0.57460625
+    },
+    {
+      "model": "lightgbm",
+      "params": "{'num_leaves': 127, 'min_child_samples': 500}",
+      "cv_pr_auc": 0.5717401
+    },
+    {
+      "model": "lightgbm",
+      "params": "{'num_leaves': 255, 'min_child_samples': 1000}",
+      "cv_pr_auc": 0.56833861
+    }
+  ],
+  "chosen": {
+    "lightgbm": {
+      "num_leaves": 31,
+      "min_child_samples": 200
+    },
+    "logistic": {
+      "C": 0.1
+    }
+  },
+  "calibrated": {
+    "logistic": true,
+    "lightgbm": false
+  },
+  "march": {
+    "rule": {
+      "pr_auc": 0.32121046,
+      "roc_auc": 0.7840549,
+      "brier": 0.10365206,
+      "capture_5": 0.24902095,
+      "capture_10": 0.49780144,
+      "capture_20": 0.6754609
+    },
+    "logistic": {
+      "pr_auc": 0.5063972,
+      "roc_auc": 0.84544946,
+      "brier": 0.05944272,
+      "capture_5": 0.37062865,
+      "capture_10": 0.56380396,
+      "capture_20": 0.73982595
+    },
+    "lightgbm": {
+      "pr_auc": 0.59433642,
+      "roc_auc": 0.86254809,
+      "brier": 0.05436828,
+      "capture_5": 0.41064926,
+      "capture_10": 0.60369861,
+      "capture_20": 0.7349708
+    }
+  },
+  "lightgbm_minus_logistic": {
+    "diff": 0.08793922,
+    "ci": [
+      0.0857089,
+      0.09051008
+    ],
+    "draws": 1000
+  },
+  "ships": "lightgbm",
+  "importance_top10": {
+    "auto_renew": 0.43545421,
+    "last_cancel": 0.1996849,
+    "payment_method": 0.06913549,
+    "days_to_expiry": 0.04321942,
+    "n_tx_90": 0.04206087,
+    "tenure_days": 0.03679403,
+    "n_tx_365": 0.03093047,
+    "reg_days": 0.0190915,
+    "list_price": 0.01905967,
+    "n_cancel_30": 0.01903362
+  }
+}

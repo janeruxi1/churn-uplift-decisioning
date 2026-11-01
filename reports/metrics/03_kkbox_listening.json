@@ -1,0 +1,38 @@
+{
+  "source": "real",
+  "logs_available": true,
+  "share_listening": 0.69596688,
+  "churn_by_days_active": {
+    "0": 0.09294928,
+    "1\u20133": 0.08760861,
+    "4\u20137": 0.08913162,
+    "8\u201310": 0.08959443,
+    "11\u201314": 0.0886127
+  },
+  "half_b": {
+    "payments only": {
+      "pr_auc": 0.71868653,
+      "roc_auc": 0.91611775,
+      "brier": 0.04279392,
+      "capture_5": 0.47264399,
+      "capture_10": 0.68546891,
+      "capture_20": 0.83137524
+    },
+    "payments + listening": {
+      "pr_auc": 0.72961683,
+      "roc_auc": 0.92405076,
+      "brier": 0.04189303,
+      "capture_5": 0.48036185,
+      "capture_10": 0.69023245,
+      "capture_20": 0.83822283
+    }
+  },
+  "listening_minus_payments": {
+    "diff": 0.0109303,
+    "ci": [
+      0.01003847,
+      0.01187137
+    ],
+    "draws": 1000
+  }
+}
