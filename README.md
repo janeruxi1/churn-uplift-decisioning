@@ -6,7 +6,7 @@
 ![Tests](https://img.shields.io/badge/tests-93%20passing-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-> **Cost-aware customer-retention system** for a fictional streaming subscription business (synthetic data with realistic churn bands, tenure spikes, engagement cohorts and an intervention menu). End-to-end: a calibrated churn model, a budget-constrained intervention policy, a randomized experiment, and a deployed decision-support tool. Sister project to [`StreamFlix-AB-Testing`](https://github.com/janeruxi1/StreamFlix-AB-Testing) and [`StreamFlix-RAG-evaluation`](https://github.com/janeruxi1/StreamFlix-RAG-evaluation), built on the same StreamFlix context.
+> **Cost-aware customer-retention system** for a fictional streaming subscription business (synthetic data with realistic churn bands, tenure spikes, engagement cohorts and an intervention menu). End-to-end: a calibrated churn model, a budget-constrained intervention policy, a randomized experiment, and a deployed decision-support tool. Sister project to [`ab-testing-real-experiments`](https://github.com/janeruxi1/ab-testing-real-experiments) and [`StreamFlix-RAG-evaluation`](https://github.com/janeruxi1/StreamFlix-RAG-evaluation), built on the same StreamFlix context.
 
 ![Hero](reports/figures/07_hero_summary.png)
 
