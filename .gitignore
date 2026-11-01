@@ -41,3 +41,6 @@ mlruns/
 mlartifacts/
 mlflow.db*
 
+
+# Raw data (KKBox is Kaggle competition data; telecom is CC BY-NC-ND): never committed
+data/raw/
