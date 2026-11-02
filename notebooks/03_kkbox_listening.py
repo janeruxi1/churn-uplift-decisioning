@@ -8,6 +8,14 @@
 # is a within-month result, and the prediction point (each member's expiry) is later than notebook
 # 02's (1 March).
 
+
+# %% [markdown]
+# | | |
+# |---|---|
+# | **Question** | Does how much a member listens in the 14 days before expiry improve the payment-based model? |
+# | **Answer** | Barely. Adding listening moves PR-AUC from 0.719 to 0.730 (+0.011). Payment behaviour carries almost all of the signal, so listening data is not worth building a pipeline for this purpose. |
+# | **Next** | [Notebook 04](04_kkbox_lifetime_value.ipynb) puts a value on each member. |
+
 # %%
 import os
 import sys
@@ -102,6 +110,10 @@ ax.spines[["top", "right"]].set_visible(False)
 fig.tight_layout()
 records.save_figure(fig, "03_kkbox_listening.png", SOURCE)
 
+
+# %% [markdown]
+# **How to read the figure.** Each bar is March churn for members who listened on that many of the 14 days before their expiry. The bars are close to flat: members who barely listened churn at about the same rate as daily listeners, which is why listening adds so little to the model.
+
 # %%
 record = {"logs_available": has_logs, "share_listening": float((mar["days_active"] > 0).mean()),
           "churn_by_days_active": {str(k): float(v) for k, v in g.items()},
@@ -109,3 +121,11 @@ record = {"logs_available": has_logs, "share_listening": float((mar["days_active
 print("wrote", records.write("03_kkbox_listening", record, SOURCE).name)
 print(f"Within March, listening before expiry moves PR-AUC from {res.iloc[0]['pr_auc']:.3f} to {res.iloc[1]['pr_auc']:.3f} "
       f"({boot['diff']:+.3f}, 95% CI {boot['ci'][0]:+.3f} to {boot['ci'][1]:+.3f}).")
+
+# %% [markdown]
+# ## Takeaways
+#
+# - **Listening adds +0.011 PR-AUC**, real but small; payments are the signal.
+# - The numbers here are within March (a random half for training, the other for testing), so they are higher than notebook 02's out-of-time results and should not be compared directly.
+#
+# **Next:** [notebook 04](04_kkbox_lifetime_value.ipynb), what a member is worth.

@@ -13,6 +13,14 @@
 # - **Which model ships:** LightGBM only if its March PR-AUC beats logistic regression with a
 #   paired bootstrap interval that excludes zero.
 
+
+# %% [markdown]
+# | | |
+# |---|---|
+# | **Question** | Which members will churn next month? Trained on February 2017 and tested once on March, the way a deployed model is used. |
+# | **Answer** | LightGBM ships: PR-AUC 0.594 on March against a 9.0% base rate, clearly ahead of logistic regression (0.506) and a simple rule (0.321). Its top 10% of scores hold 60% of the members who churned. Its probabilities run low when churn rises, so calibration needs a monthly check. |
+# | **Next** | [Notebook 03](03_kkbox_listening.ipynb) tests whether listening data adds anything. |
+
 # %%
 import os
 import sys
@@ -161,6 +169,10 @@ for ax in axes:
 fig.tight_layout()
 records.save_figure(fig, "02_kkbox_churn_model.png", SOURCE)
 
+
+# %% [markdown]
+# **How to read the figure.** Left (calibration): each point is a tenth of members, grouped by predicted churn; a well-calibrated model sits on the diagonal. Points above it mean more members churned than predicted, which is what happens when churn rises from February to March. Right (gains): if you contact members from the highest score down, how many of the churners you reach. A steeper curve is a better ranking; the top 10% reaching about 60% of churners is what makes a targeted campaign affordable.
+
 # %%
 gain = pd.Series(gbm.booster_.feature_importance("gain"), index=Xt_fit.columns).sort_values(ascending=False)
 importance = (gain / gain.sum()).head(10)
@@ -175,3 +187,12 @@ m = results.loc[ship]
 print(f"On March, the {ship} model reaches PR-AUC {m['pr_auc']:.3f} against a {y_mar.mean():.1%} base rate "
       f"(ROC-AUC {m['roc_auc']:.3f}); the top 10% of scores hold {m['capture_10']:.0%} of churners. "
       f"The rule reaches PR-AUC {results.loc['rule', 'pr_auc']:.3f}.")
+
+# %% [markdown]
+# ## Takeaways
+#
+# - **The model ranks well on a month it never saw:** PR-AUC 0.594, about 6.6 times the base rate.
+# - **LightGBM earns its place** over logistic regression by a margin whose interval excludes zero, as the plan required.
+# - **Watch calibration:** the ranking holds up, but predicted probabilities run low when churn rises; recalibrate monthly before using them in money calculations.
+#
+# **Next:** [notebook 03](03_kkbox_listening.ipynb), does listening add anything?

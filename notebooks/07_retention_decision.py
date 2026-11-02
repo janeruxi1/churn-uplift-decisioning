@@ -11,6 +11,14 @@
 # Per member: expected value of the offer = P(churn) × relative reduction × lifetime value − cost,
 # where the cost is one free month (the member's monthly payment) for everyone who stays.
 
+
+# %% [markdown]
+# | | |
+# |---|---|
+# | **Question** | Should KKBox give at-risk members a free month, and to whom? |
+# | **Answer** | Not yet. At the telecom campaign's best estimate (14% fewer churners), the offer pays for about 11,000 of 971,000 members, worth about NT$0.57M net a month, but the interval includes no effect at all. Even the best 1% of members need a 12% churn reduction to break even. Recommendation: run a small test (256 members per arm among the highest-risk members) before rolling out. |
+# | **Next** | The [decision memo](../reports/decision_memo.md) sums up the project. |
+
 # %%
 import sys
 from pathlib import Path
@@ -120,6 +128,10 @@ ax.spines[["top", "right"]].set_visible(False)
 fig.tight_layout()
 records.save_figure(fig, "07_retention_decision.png", SOURCE)
 
+
+# %% [markdown]
+# **How to read the figure.** The horizontal axis is how much the offer would cut churn; the curve is the net value of the best policy at that effect. The yellow line and band are the telecom estimate and its 95% interval. Where the curve is above zero the offer pays; the band covers both paying and not paying, which is exactly why the recommendation is a test.
+
 # %% [markdown]
 # ## 3. Summaries for the demo app
 #
@@ -147,3 +159,12 @@ pt = table.loc["point"]
 print(f"At the telecom estimate ({R['point']:.0%} fewer churners), {int(pt['members_worth_offering']):,} of {len(m):,} March "
       f"members are worth an offer, for NT${pt['net_value_ntd'] / 1e6:.2f}M net; even the best 1% of members need a "
       f"{be_q['top_1']:.0%} cut to break even.")
+
+# %% [markdown]
+# ## Takeaways
+#
+# - **Decide across the uncertainty, not at the point estimate.** At the best guess the offer pays for a small group; at the bottom of the interval it pays for no one.
+# - **Break-even is a useful way to talk to the business:** "the offer must cut churn by at least 12% for even the best members".
+# - **The cheapest way to know is a test**, and a small one is enough.
+#
+# **Back to:** the [README](../README.md) or the [decision memo](../reports/decision_memo.md).

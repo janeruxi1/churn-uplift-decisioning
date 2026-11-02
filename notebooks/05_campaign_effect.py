@@ -13,6 +13,14 @@
 # Everything below follows the plan committed before the data was downloaded
 # ([`reports/telecom_analysis_plan.md`](../reports/telecom_analysis_plan.md)).
 
+
+# %% [markdown]
+# | | |
+# |---|---|
+# | **Question** | Did calling high-risk customers with a retention offer reduce churn? (A real campaign at a Belgian telecom operator.) |
+# | **Answer** | No detectable effect: −0.49 points of two-month churn, 95% CI −1.49 to +0.51. Along the way, the "randomized" hold-back turned out not to be random for everyone (a model predicts who was called, AUC 0.64), so the plan switched to propensity weighting before reading the outcome. |
+# | **Next** | [Notebook 06](06_campaign_targeting.ipynb) asks whether some customers respond even if the average is zero. |
+
 # %%
 import os
 import sys
@@ -140,6 +148,10 @@ ax.spines[["top", "right"]].set_visible(False)
 fig.tight_layout()
 records.save_figure(fig, "05_campaign_effect.png", SOURCE)
 
+
+# %% [markdown]
+# **How to read the figure.** Each row is one way of estimating the call's effect; the dot is the estimate and the bar its 95% interval. Bars left of zero would mean the call reduced churn. Every bar crosses zero, and they agree with each other: whichever method is used, there is no detectable effect.
+
 # %%
 np.save(telecom.cache_dir(SOURCE) / "propensity.npy", e)   # reused by notebook 06; never committed
 record = {"n": len(df), "called": n1, "held_back": n0, "share_called": share, "data_checks": data_checks,
@@ -161,3 +173,12 @@ lines = [
     f"({-dr['ci'][0] / raw.rate_held_back:.0%} of the held-back churn rate).",
 ]
 print("\n".join(f"{i}. {s}" for i, s in enumerate(lines, 1)))
+
+# %% [markdown]
+# ## Takeaways
+#
+# - **Always check the randomization.** The dataset's own check (a classifier vs always guessing "called") missed that assignment depended on the profile; an AUC-with-permutation check found it.
+# - **No detectable effect of the call**, and the data rule out a reduction larger than 1.5 points.
+# - A churn model tells you who will leave; only an experiment like this one tells you whether contacting them helps.
+#
+# **Next:** [notebook 06](06_campaign_targeting.ipynb), could targeting find the customers it helps?

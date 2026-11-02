@@ -14,6 +14,14 @@
 # weights. **Decision rule (from the plan):** uplift targeting is recommended only if its Qini
 # beats churn-risk ranking with a paired bootstrap interval that excludes zero.
 
+
+# %% [markdown]
+# | | |
+# |---|---|
+# | **Question** | Even with no average effect, could ranking customers (by churn risk or by predicted uplift) find the ones the call helps? |
+# | **Answer** | No. Neither churn risk nor two uplift models (T- and X-learner) beats calling at random. The plan's recommendation: if the call centre calls at all, call at random within the eligible group, and treat the next campaign as an experiment. |
+# | **Next** | [Notebook 07](07_retention_decision.ipynb) turns all of this into a decision. |
+
 # %%
 import sys
 from pathlib import Path
@@ -102,6 +110,10 @@ ax.spines[["top", "right"]].set_visible(False)
 fig.tight_layout()
 records.save_figure(fig, "06_campaign_targeting.png", SOURCE)
 
+
+# %% [markdown]
+# **How to read the figure (a Qini curve).** Move right as you call more customers, best-ranked first; the height is how many churners the calls prevented per 1,000 customers. A good ranking rises steeply at the left, above the dotted line for random calling. Here every curve hugs the random line or falls below it.
+
 # %%
 beats_risk = {k: v["ci"][0] > 0 for k, v in paired.items()}
 better_than_random = {k: bool(summary.loc[k, "qini_2.5"] > 0) for k in ("churn_risk", "t_learner", "x_learner")}
@@ -119,3 +131,11 @@ lines = [f"{labels[k]}: Qini {summary.loc[k, 'qini']:+.5f} [{summary.loc[k, 'qin
          f"{summary.loc[k, 'qini_97.5']:+.5f}]" for k in ("churn_risk", "t_learner", "x_learner")]
 lines.append(f"Recommendation under the plan's rule: {rec}.")
 print("\n".join(f"{i}. {s}" for i, s in enumerate(lines, 1)))
+
+# %% [markdown]
+# ## Takeaways
+#
+# - **Uplift models are not magic:** with a small, noisy effect they cannot find who responds, and here they do no better than random.
+# - **Ranking by churn risk is not the same as ranking by who the call helps**, and neither works here.
+#
+# **Next:** [notebook 07](07_retention_decision.ipynb), the decision.

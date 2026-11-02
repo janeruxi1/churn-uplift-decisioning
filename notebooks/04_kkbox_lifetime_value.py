@@ -9,6 +9,14 @@
 # remaining paid months over **24 months**, times their monthly payment, times an assumed **30%
 # gross margin**. Sensitivity: 12 and 36 months, 20% and 40% margin.
 
+
+# %% [markdown]
+# | | |
+# |---|---|
+# | **Question** | How much is keeping a March member worth? |
+# | **Answer** | About NT$687 of margin on average over 24 months (17.6 expected paid months at a median NT$151 a month, with an assumed 30% margin). Among monthly plans, auto-renew members stay far longer: 44% are still paying after 24 months, against 4% without auto-renew. |
+# | **Next** | [Notebook 05](05_campaign_effect.ipynb) measures whether a retention contact keeps customers. |
+
 # %%
 import sys
 from pathlib import Path
@@ -71,6 +79,10 @@ ax.spines[["top", "right"]].set_visible(False)
 fig.tight_layout()
 records.save_figure(fig, "04_kkbox_lifetime_value.png", SOURCE)
 
+
+# %% [markdown]
+# **How to read the figure.** Each line is a group of subscriptions (by plan and auto-renew); its height is the share still paying that many months after the subscription started. A line that stays high is a group that stays. Right of the dotted line the data runs out and the curve is extrapolated, which is one reason the value is capped at 24 months.
+
 # %% [markdown]
 # ## 2. Each March member's value
 
@@ -105,3 +117,11 @@ record = {"spells": int(len(sp)), "members": int(sp["msno"].nunique()), "share_c
 print("wrote", records.write("04_kkbox_lifetime_value", record, SOURCE).name)
 print(f"A March member is worth NT${cur['ltv'].mean():,.0f} on average (median NT${cur['ltv'].median():,.0f}) in margin "
       f"over 24 months: {cur['months_24'].mean():.1f} expected paid months at a median NT${cur['monthly_paid'].median():.0f} a month.")
+
+# %% [markdown]
+# ## Takeaways
+#
+# - **A March member is worth NT$687 on average** over 24 months; the value per member feeds the offer decision in notebook 07.
+# - **The margin and horizon are assumptions**; the sensitivity table shows how the value moves with 12 or 36 months and a 20% or 40% margin.
+#
+# **Next:** [notebook 05](05_campaign_effect.ipynb), a real retention campaign.

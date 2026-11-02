@@ -16,6 +16,14 @@
 #
 # The March labels are not read here: the plan keeps them for the final evaluation in notebook 02.
 
+
+# %% [markdown]
+# | | |
+# |---|---|
+# | **Question** | Before building any model: can the churn label and the payment data be trusted, and is there any way future information leaks into the features? |
+# | **Answer** | Yes. Rebuilding February's label from the raw payments agrees 97.6% of the time, the features use only payments dated before the cutoff, and the quality issues found are known and handled. Auto-renew is the strongest early signal: 33% churn with it off against 3.0% with it on. |
+# | **Next** | [Notebook 02](02_kkbox_churn_model.ipynb) builds the churn model. |
+
 # %%
 import sys
 from pathlib import Path
@@ -134,6 +142,10 @@ for ax in axes:
 fig.tight_layout()
 records.save_figure(fig, "01_kkbox_data_checks.png", SOURCE)
 
+
+# %% [markdown]
+# **How to read the figure.** Left: February's churn rate for members with auto-renew on and off; the gap is the single strongest signal in the data. Right: churn by how long the member has been paying; newer members leave more often. Both are descriptions of February only; the model in notebook 02 is judged on March.
+
 # %%
 record = {"rows": sizes, "payments_span": list(span), "label_agreement_feb": agree,
           "label_crosstab_feb": {f"{i}_{j}": int(cross.loc[i, j]) for i in (0, 1) for j in (0, 1)},
@@ -142,3 +154,12 @@ record = {"rows": sizes, "payments_span": list(span), "label_agreement_feb": agr
 print("wrote", records.write("01_kkbox_data_checks", record, SOURCE).name)
 print(f"Label rebuilt with {agree:.1%} agreement; features use no future data ({identical}); "
       f"February churn {feb_rate:.1%}, {g1.get(0.0, 0):.0%} with auto-renew off against {g1.get(1.0, 0):.1%} with it on.")
+
+# %% [markdown]
+# ## Takeaways
+#
+# - **The label can be trusted:** it rebuilds from the payments, and the few disagreements are explained.
+# - **No future data leaks in:** rebuilding the features with all later rows deleted gives the same values (this check caught, and the code now fixes, a tie-break bug).
+# - **Auto-renew and recent cancellations** are where the signal is; expect them at the top of the model.
+#
+# **Next:** [notebook 02](02_kkbox_churn_model.ipynb), the churn model.
