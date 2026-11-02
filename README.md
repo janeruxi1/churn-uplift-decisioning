@@ -1,5 +1,6 @@
 # 💸 Churn and retention on real data
 
+[![Live Demo](https://img.shields.io/badge/Streamlit-Live%20Demo-FF4B4B?logo=streamlit)](https://janeruxi1-churn-uplift-decisioning.streamlit.app/)
 ![CI](https://github.com/janeruxi1/churn-uplift-decisioning/actions/workflows/ci.yml/badge.svg)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
@@ -93,7 +94,7 @@ download KKBox from Kaggle and the telecom file from OpenML, run
 
 ## Interactive demo
 
-[janeruxi1-streamflix-churn-retention.streamlit.app](https://janeruxi1-streamflix-churn-retention.streamlit.app/)
+[janeruxi1-churn-uplift-decisioning.streamlit.app](https://janeruxi1-churn-uplift-decisioning.streamlit.app/)
 (`streamlit run app/streamlit_app.py` locally). Two pages: **real data** (the churn model's
 results, the retention experiment, and the offer decision with its assumptions as sliders) and the
 **StreamFlix case study** from the project's first version.

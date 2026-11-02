@@ -152,8 +152,8 @@ v1 captures over half of what perfect targeting would, because the credit's effe
 
 ## Appendix
 
-- Decision rule, budget sweep, sensitivity: [`notebooks/streamflix/06_decision_rule.ipynb`](../../notebooks/06_decision_rule.ipynb)
-- Calibration and fairness: [`notebooks/streamflix/05b_fairness_audit.ipynb`](../../notebooks/05b_fairness_audit.ipynb)
-- Experiment and uplift models: [`notebooks/streamflix/08_uplift_modeling.ipynb`](../../notebooks/08_uplift_modeling.ipynb), [`notebooks/streamflix/09_policy_comparison.ipynb`](../../notebooks/09_policy_comparison.ipynb)
+- Decision rule, budget sweep, sensitivity: [`notebooks/streamflix/06_decision_rule.ipynb`](../../notebooks/streamflix/06_decision_rule.ipynb)
+- Calibration and fairness: [`notebooks/streamflix/05b_fairness_audit.ipynb`](../../notebooks/streamflix/05b_fairness_audit.ipynb)
+- Experiment and uplift models: [`notebooks/streamflix/08_uplift_modeling.ipynb`](../../notebooks/streamflix/08_uplift_modeling.ipynb), [`notebooks/streamflix/09_policy_comparison.ipynb`](../../notebooks/streamflix/09_policy_comparison.ipynb)
 - Metric framework: [`metrics_framework.md`](./metrics_framework.md) · PM brief: [`scenario_brief.md`](./scenario_brief.md) · Confidence intervals: [`metric_confidence_intervals.md`](./metric_confidence_intervals.md)
 - Interactive tool: `streamlit run app/streamflix_app.py`

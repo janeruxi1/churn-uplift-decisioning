@@ -5,7 +5,7 @@ Moved out of the README to keep it scannable. See [README](../notebooks/streamfl
 ## 🗂️ Project Structure
 
 ```
-streamflix-churn-retention/
+churn-uplift-decisioning/
 ├── README.md                        # You are here
 ├── LICENSE                          # MIT
 ├── data/
@@ -86,7 +86,7 @@ Three tabs:
 
 The app imports directly from `src/`, so the math is the same as the notebooks and is protected by the same 93 unit tests; `tests/test_app_smoke.py` (3 more tests, run where streamlit, optuna and shap are installed) runs the app itself and checks it shows the reported +$174k / 1.87×. See [`app/README.md`](../app/streamflix_README.md) for deployment to Streamlit Community Cloud.
 
-**Live demo:** [https://janeruxi1-streamflix-churn-retention.streamlit.app/](https://janeruxi1-streamflix-churn-retention.streamlit.app/)
+**Live demo:** [https://janeruxi1-churn-uplift-decisioning.streamlit.app/](https://janeruxi1-churn-uplift-decisioning.streamlit.app/)
 
 ---
 

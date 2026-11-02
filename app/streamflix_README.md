@@ -2,7 +2,7 @@
 
 Interactive tool for the Retention team. Adjust intervention costs, uplifts, and budget to see how the recommended policy changes.
 
-**Live demo:** [https://janeruxi1-streamflix-churn-retention.streamlit.app/](https://janeruxi1-streamflix-churn-retention.streamlit.app/)
+**Live demo:** [https://janeruxi1-churn-uplift-decisioning.streamlit.app/](https://janeruxi1-churn-uplift-decisioning.streamlit.app/)
 
 ## Run locally
 
@@ -27,13 +27,13 @@ Three tabs:
 
 ## How the math stays honest
 
-The app imports directly from `src/` — the same code path the analysis notebooks use, including the shadow-price budget allocation in `src/decisions/policy.py`. Changes there flow through both the notebooks and the demo without duplication. `requirements.txt` keeps scikit-learn below 1.9: version 1.9 changed how HistGradientBoosting fits, and a model retrained under it moves the headline by about $2k, so the cap keeps the live app on the reported numbers. `tests/test_app_smoke.py` checks the app shows +$174k / 1.87×.
+The app imports directly from `src/` — the same code path the analysis notebooks use, including the shadow-price budget allocation in `src/decisions/policy.py`. Changes there flow through both the notebooks and the demo without duplication. `requirements.txt` keeps scikit-learn below 1.9: version 1.9 changed how HistGradientBoosting fits, and a model retrained under it moves the headline by about $2k, so the cap keeps the live app on the reported numbers. `tests/test_streamflix_app_smoke.py` checks the app shows +$174k / 1.87×.
 
 ## Deploy publicly (Streamlit Community Cloud — free)
 
 1. Push the repo to GitHub (the data CSVs are committed; model files are gitignored and the app trains them on first boot).
 2. Sign in at [share.streamlit.io](https://share.streamlit.io) with GitHub.
-3. Click **New app** → select the `StreamFlix-Churn-Retention` repo → main branch → `app/streamflix_app.py`.
+3. Click **New app** → select the `churn-uplift-decisioning` repo → main branch → `app/streamlit_app.py` (the entry point: it serves the real-data page and this StreamFlix page together).
 4. First boot takes ~30–45 seconds (data generation + model training). Every subsequent visit uses the cached artifacts.
 
 No secrets or environment variables needed. The default deployment URL follows the pattern `https://<username>-<repo>.streamlit.app/`.
