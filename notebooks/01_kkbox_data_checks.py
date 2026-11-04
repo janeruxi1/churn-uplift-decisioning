@@ -160,6 +160,6 @@ print(f"Label rebuilt with {agree:.1%} agreement; features use no future data ({
 #
 # - **The label can be trusted:** it rebuilds from the payments, and the few disagreements are explained.
 # - **No future data leaks in:** rebuilding the features with all later rows deleted gives the same values (this check caught, and the code now fixes, a tie-break bug).
-# - **Auto-renew and recent cancellations** are where the signal is; expect them at the top of the model.
+# - **Auto-renew** is where the signal is; expect it at the top of the model (notebook 02's SHAP analysis confirms it).
 #
 # **Next:** [notebook 02](02_kkbox_churn_model.ipynb), the churn model.

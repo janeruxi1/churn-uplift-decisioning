@@ -1,4 +1,5 @@
-"""MLflow tracking wrappers for the StreamFlix churn pipeline.
+"""MLflow tracking wrappers, used by the real-data notebooks (KKBox model selection, the telecom
+campaign's nuisance and uplift models) and the StreamFlix appendix.
 
 Model training in Phase 4 fits three variants (LR, XGBoost, calibrated
 XGBoost). Without tracking we'd rely on comparing screenshots of the
@@ -14,8 +15,9 @@ Design:
     - MLflow is an OPTIONAL dependency. If it's not installed, the
       helpers no-op silently so CI and lightweight environments still
       work. This mirrors how we handle shap in explain.py.
-    - Runs land in the SQLite backend at `mlflow.db` under the project
-      root (add to .gitignore -- these are regenerable artifacts).
+    - Runs land in the SQLite backend at `mlflow.db` in the project root,
+      whichever folder the notebook runs from (ignored by git: regenerable).
+      Browse them with `mlflow ui --backend-store-uri sqlite:///mlflow.db`.
     - Model Registry IS used for production winners. After the notebooks
       pick a winner, call `register_production_model()` to promote it
       under a stable registered name with a @production alias.
@@ -130,8 +132,8 @@ def _quiet_mlflow_loggers() -> None:
     log level back up manually.
     """
     import logging
-    for name in ("mlflow.sklearn", "mlflow.utils.environment",
-                 "mlflow.models.model"):
+    for name in ("mlflow", "mlflow.sklearn", "mlflow.utils.environment",
+                 "mlflow.models.model", "alembic"):
         logging.getLogger(name).setLevel(logging.ERROR)
 
 
@@ -146,16 +148,24 @@ def _configure_tracking_backend() -> None:
     """
     import os
     from pathlib import Path
-    # Use absolute path so training runs from notebooks/ still find the
-    # DB file that mlflow ui launched from the project root will read.
-    db_path = (Path.cwd() / "mlflow.db").resolve()
-    os.environ["MLFLOW_TRACKING_URI"] = f"sqlite:///{db_path.as_posix()}"
+    # The project root, not the working directory: notebooks run from notebooks/, and every run
+    # should land in the one database `mlflow ui` reads from the root.
+    db_path = Path(__file__).resolve().parents[2] / "mlflow.db"
+    # Keep notebook output clean and local: no start-up hints, no usage telemetry, and no tqdm
+    # warning about missing notebook widgets when MLflow imports it.
+    import warnings
+    warnings.filterwarnings("ignore", message="IProgress not found")
+    os.environ.setdefault("MLFLOW_DISABLE_AGENT_HINT", "1")
+    os.environ.setdefault("MLFLOW_DISABLE_TELEMETRY", "true")
+    os.environ.setdefault("DO_NOT_TRACK", "true")
+    os.environ.setdefault("MLFLOW_TRACKING_URI", f"sqlite:///{db_path.as_posix()}")   # an explicit URI wins
 
 
 def register_production_model(
     run_id: str,
     registered_model_name: str,
     artifact_name: str = "model",
+    quiet: bool = False,
 ) -> None:
     """Promote a logged run's model artifact into the MLflow Model
     Registry as the new production version.
@@ -200,8 +210,12 @@ def register_production_model(
     mlflow.set_tracking_uri(os.environ["MLFLOW_TRACKING_URI"])
 
     model_uri = f"runs:/{run_id}/{artifact_name}"
+    import contextlib
+    import io
     try:
-        result = mlflow.register_model(model_uri=model_uri, name=registered_model_name)
+        quiet_ctx = contextlib.redirect_stderr(io.StringIO()) if quiet else contextlib.nullcontext()
+        with quiet_ctx:   # MLflow prints "Created version N" to stderr
+            result = mlflow.register_model(model_uri=model_uri, name=registered_model_name)
         version = result.version
     except Exception as e:
         print(f"  Registry: could not register {registered_model_name} ({type(e).__name__}: {e})")
@@ -241,7 +255,8 @@ def register_production_model(
             registered_model_name, "production"
         )
         if str(readback.version) == str(version):
-            print(f"  Registry: {registered_model_name} v{version} tagged @production (verified)")
+            if not quiet:
+                print(f"  Registry: {registered_model_name} v{version} tagged @production (verified)")
             return
         else:
             modern_error = (
@@ -301,3 +316,28 @@ def mlflow_run(run_name: str,
     mlflow.set_experiment(experiment_name)
     with mlflow.start_run(run_name=run_name):
         yield _MLflowRun(mlflow)
+
+
+def log_run(experiment: str, run_name: str, params: Optional[Dict[str, Any]] = None,
+            metrics: Optional[Dict[str, float]] = None, tags: Optional[Dict[str, str]] = None,
+            model=None) -> Optional[str]:
+    """Log one finished run in a single call and return its run id (None without MLflow).
+
+    Metrics that are None, NaN or infinite are skipped rather than failing the run; tags are
+    stored as strings. `model`, if given, is logged as the run's `model` artifact.
+    """
+    import math
+
+    with mlflow_run(run_name, experiment_name=experiment) as run:
+        if run is None:
+            return None
+        if params:
+            run.log_params(params)
+        if metrics:
+            run.log_metrics({k: float(v) for k, v in metrics.items()
+                             if v is not None and math.isfinite(float(v))})
+        if tags:
+            run._mlflow.set_tags({k: str(v) for k, v in tags.items()})
+        if model is not None:
+            run.log_model(model, name="model")
+        return run.run_id

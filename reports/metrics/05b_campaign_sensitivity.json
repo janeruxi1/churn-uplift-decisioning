@@ -1,0 +1,12 @@
+{
+  "source": "real",
+  "held_back_churn": 0.03638254,
+  "share_kept": 0.97679892,
+  "risk_ratio": {
+    "point": 0.8649323,
+    "ci_low": 0.59038768,
+    "ci_high": 1.13947693
+  },
+  "e_value_point": 1.5810666,
+  "e_value_to_hide_ci_edge": 2.2904163
+}

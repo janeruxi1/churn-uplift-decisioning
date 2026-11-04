@@ -257,3 +257,11 @@ def cross_fit_scores(X: np.ndarray, t: np.ndarray, y: np.ndarray, propensity: fl
         r0 = lgb.LGBMRegressor(**rp, verbose=-1).fit(X[c], d0)
         out["x_learner"][te] = propensity * r0.predict(X[te]) + (1 - propensity) * r1.predict(X[te])
     return out
+
+
+def e_value(rr: float) -> float:
+    """VanderWeele & Ding's E-value for a risk ratio: the minimum strength of association (as a
+    risk ratio) that an unmeasured confounder would need with both treatment and outcome to
+    fully explain the ratio away. Ratios below 1 are inverted first; a ratio of 1 gives 1."""
+    rr = 1 / rr if rr < 1 else rr
+    return float(rr + np.sqrt(rr * (rr - 1)))

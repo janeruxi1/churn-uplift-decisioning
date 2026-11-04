@@ -1,0 +1,294 @@
+{
+  "source": "real",
+  "shap_sample": 20000,
+  "shap_top10": [
+    {
+      "feature": "auto_renew",
+      "mean_abs_shap": 0.52343184,
+      "share": 0.25180635,
+      "value_vs_push": -0.56125323
+    },
+    {
+      "feature": "payment_method",
+      "mean_abs_shap": 0.28633268,
+      "share": 0.13774552,
+      "value_vs_push": null
+    },
+    {
+      "feature": "list_price",
+      "mean_abs_shap": 0.17704013,
+      "share": 0.08516836,
+      "value_vs_push": 0.75089158
+    },
+    {
+      "feature": "tenure_days",
+      "mean_abs_shap": 0.16643616,
+      "share": 0.08006713,
+      "value_vs_push": 0.44406961
+    },
+    {
+      "feature": "reg_days",
+      "mean_abs_shap": 0.12197331,
+      "share": 0.05867747,
+      "value_vs_push": -0.16279898
+    },
+    {
+      "feature": "days_to_expiry",
+      "mean_abs_shap": 0.11276946,
+      "share": 0.05424979,
+      "value_vs_push": 0.88020501
+    },
+    {
+      "feature": "paid",
+      "mean_abs_shap": 0.09679806,
+      "share": 0.04656646,
+      "value_vs_push": 0.73158665
+    },
+    {
+      "feature": "n_tx_90",
+      "mean_abs_shap": 0.09381684,
+      "share": 0.04513229,
+      "value_vs_push": -0.60079813
+    },
+    {
+      "feature": "last_cancel",
+      "mean_abs_shap": 0.08850335,
+      "share": 0.04257613,
+      "value_vs_push": 0.16739048
+    },
+    {
+      "feature": "n_tx_365",
+      "mean_abs_shap": 0.08387983,
+      "share": 0.04035191,
+      "value_vs_push": -0.7295994
+    }
+  ],
+  "segments": [
+    {
+      "segment": "auto-renew",
+      "level": "on",
+      "members": 853954,
+      "churn": 0.04516403,
+      "mean_predicted": 0.02898771,
+      "pr_auc": 0.3380647,
+      "pr_auc_lift": 7.48526512,
+      "predicted_minus_observed": -0.01617632
+    },
+    {
+      "segment": "auto-renew",
+      "level": "off",
+      "members": 114482,
+      "churn": 0.41388166,
+      "mean_predicted": 0.32514292,
+      "pr_auc": 0.73586849,
+      "pr_auc_lift": 1.77796835,
+      "predicted_minus_observed": -0.08873874
+    },
+    {
+      "segment": "auto-renew",
+      "level": "no prior payment",
+      "members": 2524,
+      "churn": 0.54675119,
+      "mean_predicted": 0.33912059,
+      "pr_auc": 0.63705986,
+      "pr_auc_lift": 1.16517325,
+      "predicted_minus_observed": -0.2076306
+    },
+    {
+      "segment": "plan",
+      "level": "monthly",
+      "members": 944368,
+      "churn": 0.06993037,
+      "mean_predicted": 0.05275236,
+      "pr_auc": 0.47041303,
+      "pr_auc_lift": 6.72687786,
+      "predicted_minus_observed": -0.01717801
+    },
+    {
+      "segment": "plan",
+      "level": "longer",
+      "members": 24068,
+      "churn": 0.82723949,
+      "mean_predicted": 0.50521629,
+      "pr_auc": 0.90004197,
+      "pr_auc_lift": 1.08800654,
+      "predicted_minus_observed": -0.3220232
+    },
+    {
+      "segment": "plan",
+      "level": "no prior payment",
+      "members": 2524,
+      "churn": 0.54675119,
+      "mean_predicted": 0.33912059,
+      "pr_auc": 0.63705986,
+      "pr_auc_lift": 1.16517325,
+      "predicted_minus_observed": -0.2076306
+    },
+    {
+      "segment": "tenure",
+      "level": "3-12 months",
+      "members": 215509,
+      "churn": 0.08175065,
+      "mean_predicted": 0.06611109,
+      "pr_auc": 0.54854147,
+      "pr_auc_lift": 6.70993431,
+      "predicted_minus_observed": -0.01563955
+    },
+    {
+      "segment": "tenure",
+      "level": "24+ months",
+      "members": 314069,
+      "churn": 0.08388921,
+      "mean_predicted": 0.05097296,
+      "pr_auc": 0.5160855,
+      "pr_auc_lift": 6.1519891,
+      "predicted_minus_observed": -0.03291625
+    },
+    {
+      "segment": "tenure",
+      "level": "12-24 months",
+      "members": 357272,
+      "churn": 0.08798339,
+      "mean_predicted": 0.06221726,
+      "pr_auc": 0.65192534,
+      "pr_auc_lift": 7.40964148,
+      "predicted_minus_observed": -0.02576613
+    },
+    {
+      "segment": "tenure",
+      "level": "under 3 months",
+      "members": 81586,
+      "churn": 0.12932366,
+      "mean_predicted": 0.11634516,
+      "pr_auc": 0.62985318,
+      "pr_auc_lift": 4.87036311,
+      "predicted_minus_observed": -0.0129785
+    },
+    {
+      "segment": "tenure",
+      "level": "no prior payment",
+      "members": 2524,
+      "churn": 0.54675119,
+      "mean_predicted": 0.33912059,
+      "pr_auc": 0.63705986,
+      "pr_auc_lift": 1.16517325,
+      "predicted_minus_observed": -0.2076306
+    },
+    {
+      "segment": "gender",
+      "level": "unknown",
+      "members": 582055,
+      "churn": 0.06355757,
+      "mean_predicted": 0.04865636,
+      "pr_auc": 0.55407271,
+      "pr_auc_lift": 8.7176513,
+      "predicted_minus_observed": -0.01490121
+    },
+    {
+      "segment": "gender",
+      "level": "male",
+      "members": 204561,
+      "churn": 0.1290373,
+      "mean_predicted": 0.08897209,
+      "pr_auc": 0.61785936,
+      "pr_auc_lift": 4.7882228,
+      "predicted_minus_observed": -0.04006521
+    },
+    {
+      "segment": "gender",
+      "level": "female",
+      "members": 184344,
+      "churn": 0.1298659,
+      "mean_predicted": 0.08848797,
+      "pr_auc": 0.62324909,
+      "pr_auc_lift": 4.79917422,
+      "predicted_minus_observed": -0.04137793
+    },
+    {
+      "segment": "registered via",
+      "level": "7",
+      "members": 462684,
+      "churn": 0.04473247,
+      "mean_predicted": 0.02845021,
+      "pr_auc": 0.44568635,
+      "pr_auc_lift": 9.96337351,
+      "predicted_minus_observed": -0.01628226
+    },
+    {
+      "segment": "registered via",
+      "level": "9",
+      "members": 235689,
+      "churn": 0.12683239,
+      "mean_predicted": 0.08770167,
+      "pr_auc": 0.63924726,
+      "pr_auc_lift": 5.0400946,
+      "predicted_minus_observed": -0.03913073
+    },
+    {
+      "segment": "registered via",
+      "level": "3",
+      "members": 106459,
+      "churn": 0.17225411,
+      "mean_predicted": 0.12853397,
+      "pr_auc": 0.60168734,
+      "pr_auc_lift": 3.49302171,
+      "predicted_minus_observed": -0.04372013
+    },
+    {
+      "segment": "registered via",
+      "level": "missing",
+      "members": 109993,
+      "churn": 0.05347613,
+      "mean_predicted": 0.0482767,
+      "pr_auc": 0.51997354,
+      "pr_auc_lift": 9.72346986,
+      "predicted_minus_observed": -0.00519943
+    },
+    {
+      "segment": "registered via",
+      "level": "4",
+      "members": 52744,
+      "churn": 0.23102154,
+      "mean_predicted": 0.1842044,
+      "pr_auc": 0.62152554,
+      "pr_auc_lift": 2.6903359,
+      "predicted_minus_observed": -0.04681714
+    },
+    {
+      "segment": "registered via",
+      "level": "13",
+      "members": 3391,
+      "churn": 0.09879092,
+      "mean_predicted": 0.08551261,
+      "pr_auc": 0.52156461,
+      "pr_auc_lift": 5.27947936,
+      "predicted_minus_observed": -0.01327831
+    }
+  ],
+  "psi_features": {
+    "tenure_days": 0.69699457,
+    "n_tx_30": 0.47616329,
+    "days_to_expiry": 0.2169759,
+    "n_tx_total": 0.15648619,
+    "n_tx_365": 0.12920704,
+    "n_tx_90": 0.01684145,
+    "list_price": 0.0126388,
+    "reg_days": 0.0029053,
+    "payment_method": 0.00237344,
+    "paid": 0.00214338,
+    "registered_via": 0.000948,
+    "n_cancel_90": 0.00023798,
+    "age": 0.00022992,
+    "city": 0.00021275,
+    "plan_days": 0.00016475,
+    "n_cancel_30": 0.0001609,
+    "gender": 0.00015382,
+    "last_cancel": 0.0001041,
+    "discount": 0.00010271,
+    "n_cancel_365": 0.00010244,
+    "auto_renew": 0.0001024,
+    "share_auto_renew": 0.0001024,
+    "has_member_row": 0.0
+  },
+  "psi_score": 0.02952615
+}

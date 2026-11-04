@@ -75,3 +75,29 @@ def paired_bootstrap_pr_auc(y, p_a, p_b, n: int = 1000, seed: int = 0) -> dict:
 def calibration_table(y, p, bins: int = 10) -> pd.DataFrame:
     q = pd.qcut(pd.Series(p).rank(method="first"), bins, labels=False)
     return pd.DataFrame({"predicted": p, "observed": y, "bin": q}).groupby("bin").mean()
+
+
+def psi(expected: pd.Series, actual: pd.Series, bins: int = 10) -> float:
+    """Population stability index of `actual` against `expected` (the reference period).
+
+    Numeric: bins are the reference's deciles (ties merged), plus a bin for missing values.
+    Categorical or text: one bin per level. Shares are floored at 1e-4 so an empty bin doesn't
+    divide by zero. Rule of thumb: under 0.1 stable, 0.1-0.25 moderate, over 0.25 large shift.
+    """
+    if pd.api.types.is_numeric_dtype(expected) and not pd.api.types.is_bool_dtype(expected):
+        e = expected.astype(float)
+        edges = np.unique(np.nanquantile(e.dropna(), np.linspace(0, 1, bins + 1)))
+        edges[0], edges[-1] = -np.inf, np.inf
+        if len(edges) < 3:                      # (almost) constant in the reference period
+            edges = np.array([-np.inf, float(np.nanmedian(e)), np.inf])
+
+        def share(s):
+            counts = pd.cut(s, edges, include_lowest=True).value_counts(sort=False).to_numpy().astype(float)
+            return np.append(counts, s.isna().sum()) / len(s)
+    else:
+        levels = sorted(set(expected.astype(str)) | set(actual.astype(str)))
+
+        def share(s):
+            return s.astype(str).value_counts(normalize=True).reindex(levels, fill_value=0).to_numpy()
+    p, q = np.clip(share(expected), 1e-4, None), np.clip(share(actual), 1e-4, None)
+    return float(np.sum((q - p) * np.log(q / p)))

@@ -87,3 +87,11 @@ primary estimate, because it can be biased by who was held back.
 5. **The limit, stated in the memo:** this assumes the features capture everything that decided
    who was held back. That cannot be checked from the data.
 
+
+## Note added 2 November 2026 (after the primary analysis)
+
+A sensitivity analysis for unmeasured confounding was added to notebook 05 after the effect had
+been estimated: E-values (VanderWeele and Ding) for the doubly robust estimate, as a risk ratio
+against the held-back churn rate, both for explaining the estimate away and for hiding a
+reduction as large as the interval's edge. It is recorded separately
+(`05b_campaign_sensitivity.json`) and does not change the primary result or the decision rule.

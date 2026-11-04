@@ -8,17 +8,17 @@
     {
       "model": "logistic",
       "params": "{'C': 0.01}",
-      "cv_pr_auc": 0.43387695
+      "cv_pr_auc": 0.4339343
     },
     {
       "model": "logistic",
       "params": "{'C': 0.1}",
-      "cv_pr_auc": 0.43484217
+      "cv_pr_auc": 0.43487173
     },
     {
       "model": "logistic",
       "params": "{'C': 1.0}",
-      "cv_pr_auc": 0.43475635
+      "cv_pr_auc": 0.43485835
     },
     {
       "model": "lightgbm",
@@ -64,12 +64,12 @@
       "capture_20": 0.6754609
     },
     "logistic": {
-      "pr_auc": 0.5063972,
-      "roc_auc": 0.84544946,
-      "brier": 0.05944272,
-      "capture_5": 0.37062865,
-      "capture_10": 0.56380396,
-      "capture_20": 0.73982595
+      "pr_auc": 0.50253257,
+      "roc_auc": 0.84558383,
+      "brier": 0.05947101,
+      "capture_5": 0.37003321,
+      "capture_10": 0.56356349,
+      "capture_20": 0.73995191
     },
     "lightgbm": {
       "pr_auc": 0.59433642,
@@ -81,10 +81,10 @@
     }
   },
   "lightgbm_minus_logistic": {
-    "diff": 0.08793922,
+    "diff": 0.09180386,
     "ci": [
-      0.0857089,
-      0.09051008
+      0.08960071,
+      0.09422977
     ],
     "draws": 1000
   },

@@ -36,17 +36,29 @@ whose "latest payment" was a tie picked at random.
 | Model | PR-AUC (March, 9.0% churn) | ROC-AUC | Churners in the top 10% |
 |---|---|---|---|
 | **LightGBM (ships)** | **0.594** | 0.863 | **60%** |
-| Logistic regression | 0.506 | 0.845 | 56% |
+| Logistic regression | 0.503 | 0.846 | 56% |
 | Rule: auto-renew off or last payment cancelled | 0.321 | 0.784 | 50% |
 
-LightGBM beats logistic regression by **+0.088** PR-AUC (95% CI +0.086 to +0.091), so it ships
-under the plan's rule. Auto-renew status and a recent cancellation carry most of the signal:
-February members with auto-renew off churned at **33%**, against **3.0%** with it on.
+LightGBM beats logistic regression by **+0.092** PR-AUC (95% CI +0.090 to +0.094), so it ships
+under the plan's rule. Auto-renew status is the strongest signal: February members with
+auto-renew off churned at **33%**, against **3.0%** with it on. SHAP values on 20,000 March
+members agree (added after the primary analysis): auto-renew accounts for **25%** of the model's
+total |SHAP|, then payment method (14%), list price (9%) and tenure (8%); a recent cancellation
+adds 4%.
 
 **One thing to watch.** Churn rose from 6.4% in February to 9.0% in March, and the model,
 calibrated on February, predicts **6.5%** on average for March. It ranks members well but its
 probabilities run low when churn rises, so a deployed model needs its calibration checked every
 month.
+
+**Where it is weaker, and what moved** (diagnostics added after the primary analysis). Among
+auto-renew members, 88% of March, churn is 4.5% and PR-AUC **0.338**: still 7.5 times better
+than picking at random inside the group, but these are the hardest churners to find. Every
+segment is under-predicted, most of all members on longer plans (51% predicted against 83%
+observed). Male and female members are ranked equally well (PR-AUC 0.618 and 0.623). From
+February to March the score's own distribution barely moved (PSI **0.030**) while churn rose,
+so a monitor that watches only scores would have missed the drift; the features that moved most
+are tenure (PSI 0.70) and the number of payments in the last 30 days (0.48).
 
 **Listening adds little.** Within March, members who did not listen at all in the 14 days before
 expiry churned at 9.3%, against 8.9% for those who listened almost daily; adding listening
@@ -78,6 +90,13 @@ deviations.
 
 The experiment could detect a change of about 1.1 points; it rules out the call cutting churn by
 more than 1.5 points.
+
+**How much hidden confounding would change that** (added after the primary analysis). As a risk
+ratio the effect is 0.86 [0.59, 1.14]. An unmeasured factor tied to both being called and
+churning by a risk ratio of **1.58** could have produced the estimate from no effect at all; to
+hide a real reduction as large as the interval allows, it would need **2.29**, on top of the 160
+profile components already adjusted for. The estimate covers the 97.7% of customers inside the
+propensity overlap region.
 
 **Targeting doesn't help either.** Neither ranking by churn risk nor two uplift models (T- and
 X-learner) beats calling at random within the eligible group.

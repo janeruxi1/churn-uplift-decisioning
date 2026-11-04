@@ -114,6 +114,21 @@ records.save_figure(fig, "06_campaign_targeting.png", SOURCE)
 # %% [markdown]
 # **How to read the figure (a Qini curve).** Move right as you call more customers, best-ranked first; the height is how many churners the calls prevented per 1,000 customers. A good ranking rises steeply at the left, above the dotted line for random calling. Here every curve hugs the random line or falls below it.
 
+# %% [markdown]
+# **Tracked in MLflow.** Each ranking (churn risk, T-learner, X-learner) is logged as a run with the
+# model settings and its Qini and top-share results, in the same experiment as notebook 05.
+
+# %%
+from src.models.tracking import log_run
+
+for name in ("churn_risk", "t_learner", "x_learner"):
+    s = summary.loc[name]
+    log_run(f"telecom_campaign_{SOURCE}", f"ranking_{name}",
+            params={"ranking": name, "model": "lightgbm", "folds": 5, **campaign.LGBM_PARAMS},
+            metrics={"qini": s["qini"], "qini_ci_low": s["qini_2.5"], "qini_ci_high": s["qini_97.5"],
+                     "top_20": s["top_20"], "top_40": s["top_40"]},
+            tags={"data": SOURCE, "stage": "targeting"})
+
 # %%
 beats_risk = {k: v["ci"][0] > 0 for k, v in paired.items()}
 better_than_random = {k: bool(summary.loc[k, "qini_2.5"] > 0) for k in ("churn_risk", "t_learner", "x_learner")}

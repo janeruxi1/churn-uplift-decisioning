@@ -152,6 +152,60 @@ records.save_figure(fig, "05_campaign_effect.png", SOURCE)
 # %% [markdown]
 # **How to read the figure.** Each row is one way of estimating the call's effect; the dot is the estimate and the bar its 95% interval. Bars left of zero would mean the call reduced churn. Every bar crosses zero, and they agree with each other: whichever method is used, there is no detectable effect.
 
+# %% [markdown]
+# ## 4. How robust is the answer to what the data cannot see?
+#
+# Added after the plan's analysis (dated note in the plan). The doubly robust estimate assumes
+# the features capture everything that decided who was held back. Two things are stated here.
+#
+# **Who the estimate is about.** Customers whose propensity fell outside [0.05, 0.95] were
+# dropped, so the effect is for the customers both arms could plausibly contain, not for all
+# 11,896.
+#
+# **E-values** (VanderWeele and Ding). Turn the effect into a risk ratio against the held-back
+# churn rate, then ask how strongly an unmeasured confounder would have to be associated with
+# both being called and churning (as a risk ratio, on top of the measured features) to (a) create
+# the observed estimate out of no effect, and (b) hide a real reduction as large as the interval's
+# edge. Small E-values mean little hidden confounding would be enough.
+
+# %%
+p0 = raw.rate_held_back
+rr = {"point": (p0 + dr["diff"]) / p0, "ci_low": (p0 + dr["ci"][0]) / p0, "ci_high": (p0 + dr["ci"][1]) / p0}
+sensitivity = {"held_back_churn": p0, "share_kept": float(keep.mean()), "risk_ratio": rr,
+               "e_value_point": campaign.e_value(rr["point"]),
+               "e_value_to_hide_ci_edge": campaign.e_value(rr["point"] / rr["ci_low"])}
+print(f"risk ratio {rr['point']:.3f} [{rr['ci_low']:.3f}, {rr['ci_high']:.3f}]; E-value for the point estimate "
+      f"{sensitivity['e_value_point']:.2f}; to hide a reduction of {-dr['ci'][0] * 100:.2f} points an unmeasured "
+      f"confounder would need risk ratios of {sensitivity['e_value_to_hide_ci_edge']:.2f} with both the call and churn")
+print("wrote", records.write("05b_campaign_sensitivity", sensitivity, SOURCE).name)
+
+# %% [markdown]
+# **How to read it.** An E-value near 1 says a weak hidden factor could explain the result; the
+# features here already include 160 principal components of the customer profile, so a hidden
+# factor would have to matter beyond all of them. The second number is the useful one for a null
+# result: it says how strong hidden confounding would have to be for the call to have really cut
+# churn by as much as the interval allows.
+
+# %% [markdown]
+# **Tracked in MLflow.** The two nuisance models behind the doubly robust estimate are logged as
+# runs: the propensity model with its overlap and balance diagnostics, and the per-arm churn
+# models with the effect they produce. Both are cross-fitted (5 folds), so the runs record
+# settings and results rather than a single fitted model.
+
+# %%
+from src.models.tracking import log_run
+
+EXPERIMENT = f"telecom_campaign_{SOURCE}"
+log_run(EXPERIMENT, "propensity_model",
+        params={"model": "logistic regression (L2)", "C": 0.1, "folds": 5, "overlap_trim": "[0.05, 0.95]"},
+        metrics={"randomization_auc": rand["auc"], "randomization_p": rand["p_value"],
+                 "dropped_share": float((~keep).mean()), **balance},
+        tags={"data": SOURCE, "stage": "nuisance: propensity"})
+log_run(EXPERIMENT, "outcome_models_aipw", params={"model": "lightgbm, one per arm", "folds": 5, **campaign.LGBM_PARAMS},
+        metrics={"aipw_diff": dr["diff"], "aipw_ci_low": dr["ci"][0], "aipw_ci_high": dr["ci"][1],
+                 "hajek_diff": ipw["diff"], "unadjusted_diff": raw.diff},
+        tags={"data": SOURCE, "stage": "nuisance: outcome", "estimator": "AIPW"})
+
 # %%
 np.save(telecom.cache_dir(SOURCE) / "propensity.npy", e)   # reused by notebook 06; never committed
 record = {"n": len(df), "called": n1, "held_back": n0, "share_called": share, "data_checks": data_checks,

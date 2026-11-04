@@ -18,6 +18,9 @@ def rec(name):
 
 K1, K2, K3, K4 = rec("01_kkbox_data_checks"), rec("02_kkbox_churn_model"), rec("03_kkbox_listening"), rec("04_kkbox_lifetime_value")
 T5, T6, D7 = rec("05_campaign_effect"), rec("06_campaign_targeting"), rec("07_retention_decision")
+DIAG, SENS = rec("02b_kkbox_model_diagnostics"), rec("05b_campaign_sensitivity")
+SEG = {(s["segment"], s["level"]): s for s in DIAG["segments"]}
+SHAP = {r["feature"]: r["share"] for r in DIAG["shap_top10"]}
 SHIP = K2["march"][K2["ships"]]
 LR, RULE = K2["march"]["logistic"], K2["march"]["rule"]
 DR, RAW = T5["effect_aipw"], T5["effect_unadjusted"]
@@ -64,6 +67,21 @@ CLAIMS = [
     ("memo", f"churn at **{D7['test_size']['target_churn']:.1%}**"),
     ("both", f"**{D7['test_size']['n_per_arm']:,}**"),
     ("memo", f"the {D7['test_size']['relative_effect']:.0%} reduction"),
+    # diagnostics (notebook 02, section 4) and sensitivity (notebook 05, section 4)
+    ("memo", f"churn is {SEG[('auto-renew', 'on')]['churn']:.1%} and PR-AUC **{SEG[('auto-renew', 'on')]['pr_auc']:.3f}**"),
+    ("memo", f"still {SEG[('auto-renew', 'on')]['pr_auc_lift']:.1f} times better"),
+    ("memo", f"({SEG[('plan', 'longer')]['mean_predicted']:.0%} predicted against {SEG[('plan', 'longer')]['churn']:.0%}"),
+    ("memo", f"(PR-AUC {SEG[('gender', 'male')]['pr_auc']:.3f} and {SEG[('gender', 'female')]['pr_auc']:.3f})"),
+    ("memo", f"(PSI **{DIAG['psi_score']:.3f}**)"),
+    ("memo", f"tenure (PSI {DIAG['psi_features']['tenure_days']:.2f})"),
+    ("memo", f"last 30 days ({DIAG['psi_features']['n_tx_30']:.2f})"),
+    ("memo", f"{SENS['risk_ratio']['point']:.2f} [{SENS['risk_ratio']['ci_low']:.2f}, {SENS['risk_ratio']['ci_high']:.2f}]"),
+    ("memo", f"risk ratio of **{SENS['e_value_point']:.2f}**"),
+    ("memo", f"it would need **{SENS['e_value_to_hide_ci_edge']:.2f}**"),
+    ("memo", f"The estimate covers the {SENS['share_kept']:.1%} of customers"),
+    ("memo", f"auto-renew accounts for **{SHAP['auto_renew']:.0%}**"),
+    ("memo", f"then payment method ({SHAP['payment_method']:.0%}), list price ({SHAP['list_price']:.0%}) and tenure ({SHAP['tenure_days']:.0%})"),
+    ("memo", f"a recent cancellation\nadds {SHAP['last_cancel']:.0%}"),
 ]
 
 
@@ -74,10 +92,11 @@ def test_doc_quotes_the_recorded_result(where, text):
 
 
 def test_records_are_real_and_the_decisions_match():
-    for r in (K1, K2, K3, K4, T5, T6, D7):
+    for r in (K1, K2, K3, K4, T5, T6, D7, DIAG, SENS):
         assert r["source"] == "real"
     assert K1["no_future_data"] and K1["label_agreement_feb"] >= 0.95
     assert K2["ships"] == "lightgbm" and "LightGBM (ships)" in DOCS["memo"]
+    assert max(SHAP, key=SHAP.get) == "auto_renew"
     assert not T5["randomization"]["passed"]
     assert DR["ci"][0] < 0 < DR["ci"][1] and "no detectable effect" in DOCS["memo"].lower()
     assert not any(T6["beats_risk"].values()) and not any(T6["better_than_random"].values())

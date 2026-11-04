@@ -14,7 +14,7 @@
 
 | Question | Answer |
 |---|---|
-| **Who will churn next month?** (KKBox, trained on February 2017, tested once on March) | LightGBM reaches **PR-AUC 0.594** against a 9.0% base rate; its top 10% of scores hold **60%** of the members who churned. Auto-renew and recent cancellations carry most of the signal; listening adds little. |
+| **Who will churn next month?** (KKBox, trained on February 2017, tested once on March) | LightGBM reaches **PR-AUC 0.594** against a 9.0% base rate; its top 10% of scores hold **60%** of the members who churned. Auto-renew status is the strongest signal (a quarter of the model's SHAP weight), then payment method and plan price; listening adds little. |
 | **Does a retention call keep customers?** (telecom, 11,896 high-risk customers) | **No detectable effect:** −0.49 points of churn (95% CI −1.49 to +0.51). And the "randomized" campaign wasn't randomized the same way for everyone (a model predicts who was called, AUC **0.64**), which the dataset's own check missed. |
 | **Should KKBox offer a free month?** | Not yet. At the best estimate it pays for about 11,000 of 971,000 members a month, but the evidence includes no effect at all. A test needs only **256** members per arm among the 33,000 highest-risk members. |
 
@@ -32,10 +32,10 @@
 |---|---|
 | **1. Plan before the data:** cohorts, cutoffs, metrics, which model ships | [`reports/kkbox_analysis_plan.md`](./reports/kkbox_analysis_plan.md), [`reports/telecom_analysis_plan.md`](./reports/telecom_analysis_plan.md) |
 | **2. Trust the data:** rebuild the churn label, prove no future data leaks in | [Notebook 01](./notebooks/01_kkbox_data_checks.ipynb) |
-| **3. Predict churn out of time:** train February, test March once; calibration, lift | [Notebook 02](./notebooks/02_kkbox_churn_model.ipynb) |
+| **3. Predict churn out of time:** train February, test March once; calibration, lift; SHAP, segment and drift diagnostics; every run tracked in MLflow, the shipped model registered | [Notebook 02](./notebooks/02_kkbox_churn_model.ipynb) |
 | **4. Test a new data source:** do listening logs add anything? | [Notebook 03](./notebooks/03_kkbox_listening.ipynb) |
 | **5. Value each member:** survival curves and lifetime value from payments | [Notebook 04](./notebooks/04_kkbox_lifetime_value.ipynb) |
-| **6. Measure the intervention:** randomization check, propensity weighting, doubly robust effect | [Notebook 05](./notebooks/05_campaign_effect.ipynb) |
+| **6. Measure the intervention:** randomization check, propensity weighting, doubly robust effect, E-values for hidden confounding | [Notebook 05](./notebooks/05_campaign_effect.ipynb) |
 | **7. Target it:** churn risk vs uplift models, judged on held-out customers | [Notebook 06](./notebooks/06_campaign_targeting.ipynb) |
 | **8. Decide:** expected value per member, break-even effect, the test to run | [Notebook 07](./notebooks/07_retention_decision.ipynb) |
 
@@ -47,7 +47,7 @@ members whose subscription expired in February and March 2017 (Kaggle, WSDM 2018
 | Notebook | What it answers |
 |---|---|
 | [01 · Data checks](./notebooks/01_kkbox_data_checks.ipynb) | The churn label rebuilt from payments agrees 97.6%; features use no data after the cutoff (the check caught a tie-break bug). |
-| [02 · Churn model](./notebooks/02_kkbox_churn_model.ipynb) | Rule vs logistic regression vs LightGBM, trained on February and tested once on March; LightGBM ships (+0.088 PR-AUC, CI excludes zero); calibration drifts as churn rises from 6.4% to 9.0%. |
+| [02 · Churn model](./notebooks/02_kkbox_churn_model.ipynb) | Rule vs logistic regression vs LightGBM, trained on February and tested once on March; LightGBM ships (+0.092 PR-AUC, CI excludes zero); calibration drifts as churn rises from 6.4% to 9.0%. |
 | [03 · Listening](./notebooks/03_kkbox_listening.ipynb) | Listening in the 14 days before expiry adds +0.011 PR-AUC: payments carry the signal. |
 | [04 · Lifetime value](./notebooks/04_kkbox_lifetime_value.ipynb) | Kaplan–Meier survival by plan and auto-renew; a March member is worth NT$687 of margin over 24 months. |
 
@@ -84,7 +84,13 @@ true effects are known, it shows the methods recover them. See
 ```bash
 pip install -r requirements.txt
 pytest                                    # methods on known answers, reported numbers, apps
+mlflow ui --backend-store-uri sqlite:///mlflow.db   # after a notebook run: browse the tracked runs
 ```
+
+**Experiment tracking.** Notebooks 02, 03, 05 and 06 log their models to MLflow (a local
+`mlflow.db`, not committed): the tuning grid and both final churn models with their March
+metrics, the listening comparison, the campaign's propensity and outcome models, and each
+targeting ranking. The churn model that ships is registered as `kkbox_churn@production`.
 
 Neither dataset can be redistributed, so without them every notebook runs on a synthetic stand-in
 (that is what CI does). To run on the real data, follow [`data/README.md`](./data/README.md):

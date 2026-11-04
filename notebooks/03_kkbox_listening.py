@@ -114,6 +114,19 @@ records.save_figure(fig, "03_kkbox_listening.png", SOURCE)
 # %% [markdown]
 # **How to read the figure.** Each bar is March churn for members who listened on that many of the 14 days before their expiry. The bars are close to flat: members who barely listened churn at about the same rate as daily listeners, which is why listening adds so little to the model.
 
+# %% [markdown]
+# **Tracked in MLflow.** Both models are logged as runs in the same experiment as notebook 02,
+# with their parameters and their scores on half B, so the comparison sits next to the model
+# selection runs.
+
+# %%
+from src.models.tracking import log_run
+
+for name, feats in (("payments only", "payments"), ("payments + listening", "payments+listening")):
+    log_run(f"kkbox_churn_{SOURCE}", f"listening_{feats}", params={"model": "lightgbm", "features": feats, **params},
+            metrics={f"halfB_{k}": v for k, v in res.loc[name].items()},
+            tags={"data": SOURCE, "stage": "listening check", "test": "March 2017, half B"})
+
 # %%
 record = {"logs_available": has_logs, "share_listening": float((mar["days_active"] > 0).mean()),
           "churn_by_days_active": {str(k): float(v) for k, v in g.items()},

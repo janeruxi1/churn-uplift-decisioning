@@ -84,3 +84,12 @@ assumption, so the decision is also reported as the **break-even** churn reducti
 
 Nothing in the March labels. If a file's columns differ from the description above, the change
 is recorded here before any label is read.
+
+## Note added 2 November 2026 (after the primary analysis)
+
+Three diagnostics were added to notebook 02, after March had been scored: SHAP contributions of
+the LightGBM model on a sample of March members, performance and calibration within segments
+(auto-renew, plan, tenure, gender, registration channel), and feature and score drift from
+February to March (population stability index). They are descriptive: they do not change the
+model, the calibration decision or which model ships, and they are recorded separately
+(`02b_kkbox_model_diagnostics.json`). Model runs are also logged to MLflow from this date.
