@@ -23,11 +23,12 @@ was downloaded, and CI checks every number below against the recorded results.
   members a month, but the evidence includes no effect at all. A test needs only **256** members per arm
   among the 33,000 highest-risk members.
 
-![Key results](./reports/figures/00_readme_summary.png)
+![A free month pays only if it cuts churn by 12% or more; the evidence spans −14% to +41%](./reports/figures/00_readme_hero.png)
 
-*Left: churners reached as more members are contacted, highest score first. Middle: four estimates of
-the call's effect; every interval spans zero. Right: how many members a free month pays for, at the low,
-best and high estimate of the effect. Drawn from the recorded results by `scripts/make_readme_figure.py`.*
+*Top: the measured effect of a real retention call on churn, with its 95% interval. Bottom: the cut in churn
+a free month needs to pay for itself, for the KKBox members where it is easiest. Only the most promising 1%
+fall inside the evidence, so the recommendation is a small test, not a rollout. Drawn from the recorded
+results by `scripts/make_readme_figure.py`.*
 
 ## How it works
 
@@ -42,10 +43,17 @@ best and high estimate of the effect. Drawn from the recorded results by `script
 | Target it | Churn risk vs T- and X-learner uplift, judged by Qini on held-out customers | [06](./notebooks/06_campaign_targeting.ipynb) |
 | Decide | Expected value per member, break-even effect, the test that would settle it | [07](./notebooks/07_retention_decision.ipynb) |
 
-![Churn model on March](./reports/figures/02_kkbox_churn_model.png)
+![The three questions: who churns, did the call work, does a free month pay](./reports/figures/00_readme_summary.png)
 
-*Predicted against observed churn (left) and churners reached (right). Points above the diagonal mean the
-model under-predicts, because churn rose from 6.4% in February to 9.0% in March.*
+*The three questions in order. Left: churners reached as more members are contacted, highest score first
+(churn rose from 6.4% in February to 9.0% in March, which the model under-predicts). Middle: four estimates
+of the call's effect; every interval spans zero. Right: how many members a free month pays for at the low,
+best and high estimate of the effect.*
+
+![Net value of a free month against its unknown effect](./reports/figures/00_readme_value.png)
+
+*Why test before rolling out: the offer's monthly value at each possible effect, for three margin
+assumptions. Inside the measured interval (shaded) it is anywhere from zero to about NT$3M a month.*
 
 ## Appendix · StreamFlix: the full workflow on simulated data
 
