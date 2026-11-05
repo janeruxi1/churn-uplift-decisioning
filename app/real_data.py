@@ -47,6 +47,7 @@ st.markdown("Who will churn, what are they worth, and is a retention offer worth
             "subscriptions (2015–2017) and a randomized retention campaign at a telecom operator (2020). "
             "The project's first version, on a simulated subscription business, is the **StreamFlix case study** "
             "page in the menu at the top.")
+st.markdown(f"[Code and notebooks]({REPO_URL}) · [Decision memo]({REPO_URL}/blob/main/reports/decision_memo.md)")
 
 tab_model, tab_call, tab_offer, tab_size = st.tabs(
     ["📉 Who will churn?", "📞 Did the call work?", "🎁 Is an offer worth it?", "📐 Size a retention test"])
@@ -59,8 +60,11 @@ with tab_model:
                   f"{m['pr_auc']:.3f} against a {M2['mar_churn']:.1%} churn rate; the top 10% of scores hold "
                   f"{m['capture_10']:.0%} of the members who churned."))
     k1, k2, k3, k4 = st.columns(4)
-    k1.metric("PR-AUC on March", f"{m['pr_auc']:.3f}", f"base rate {M2['mar_churn']:.1%}", delta_color="off", border=True)
-    k2.metric("ROC-AUC on March", f"{m['roc_auc']:.3f}", border=True)
+    k1.metric("PR-AUC on March", f"{m['pr_auc']:.3f}", f"base rate {M2['mar_churn']:.1%}", delta_color="off", border=True,
+              help="How well the score ranks churners above non-churners when churners are rare. "
+                   "Guessing at random would score about the churn rate.")
+    k2.metric("ROC-AUC on March", f"{m['roc_auc']:.3f}", border=True,
+              help="Chance that a random churner scores higher than a random member who stayed (0.5 = coin flip).")
     k3.metric("Churners in the top 10%", f"{m['capture_10']:.0%}", border=True)
     k4.metric("Label rebuilt from payments", f"{M1['label_agreement_feb']:.1%}", "agreement", delta_color="off", border=True)
 
@@ -80,10 +84,12 @@ with tab_model:
     with c2:
         st.subheader("Models compared on March")
         tbl = pd.DataFrame(M2["march"]).T[["pr_auc", "roc_auc", "brier", "capture_10"]]
-        tbl.columns = ["PR-AUC", "ROC-AUC", "Brier", "top-10% capture"]
+        tbl.columns = ["PR-AUC", "ROC-AUC", "Brier", "Top 10%"]
         tbl.index = [MODEL_NAMES[i] for i in tbl.index]
         st.dataframe(tbl.style.format({"PR-AUC": "{:.3f}", "ROC-AUC": "{:.3f}", "Brier": "{:.4f}",
-                                       "top-10% capture": "{:.0%}"}), width="stretch")
+                                       "Top 10%": "{:.0%}"}), width="stretch")
+        st.caption("Higher is better except Brier (probability error, lower is better). "
+                   "Top 10%: share of March churners in the highest-scored 10% of members.")
         b = M2["lightgbm_minus_logistic"]
         st.caption(f"LightGBM minus logistic PR-AUC: {b['diff']:+.3f} (95% CI {b['ci'][0]:+.3f} to {b['ci'][1]:+.3f}).")
         st.markdown(md(f"**Listening adds little:** {M3['listening_minus_payments']['diff']:+.3f} PR-AUC within March. "

@@ -20,6 +20,11 @@
 
 ![Churn model on March](./reports/figures/02_kkbox_churn_model.png)
 
+*Right: contact members from the highest score down, and the top 10% reaches 60% of the members
+who churned (the dotted line is contacting at random). Left: predicted against observed churn;
+points above the diagonal mean the model under-predicts, because churn rose from February to
+March.*
+
 **Start here:** the [decision memo](./reports/decision_memo.md), then
 [notebook 02](./notebooks/02_kkbox_churn_model.ipynb) (the model) and
 [notebook 05](./notebooks/05_campaign_effect.ipynb) (the experiment).
